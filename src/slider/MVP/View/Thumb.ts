@@ -7,13 +7,13 @@ class Thumb {
 
   private newThumbElement: HTMLElement | undefined;
 
-  constructor(selector: HTMLElement, HTMLclassName: string) {
+  constructor(rangeSliderSelector: HTMLElement, HTMLclassName: string) {
     this.vertical = false;
+    console.log(rangeSliderSelector);
 
-    this.rangeSliderElement = selector;
+    this.rangeSliderElement = rangeSliderSelector;
 
-    this.progressBarElement = document.querySelector('.progress-bar') as HTMLElement;
-    // this.$info = document.querySelector('.info');
+    this.progressBarElement = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement;
 
     this.createThumbElement(HTMLclassName);
 
@@ -42,7 +42,6 @@ class Thumb {
       this.newThumbElement.ondragstart = () => false;
       const rect = this.rangeSliderElement.getBoundingClientRect();
       const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
-      // this.$info.innerHTML = `${percent * 100}%`;
       this.newThumbElement.style.left = `${percent * 100}%`;
     }
   }
