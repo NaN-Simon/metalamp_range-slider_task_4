@@ -1,3 +1,5 @@
+include ./screenboard/screenboard.pug
+
 doctype html
 html(lang="ru")
   head
@@ -39,5 +41,8 @@ html(lang="ru")
       h1 Range Slider
     main.main
       .main-wrapper
+        +screenboard({
+          id: '1'
+        })
         .range-slider.slider-js
 

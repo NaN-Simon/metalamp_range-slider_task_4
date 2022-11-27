@@ -1,0 +1,56 @@
+mixin screenboard(properties = {})
+
+  -
+    const {
+      id = 0
+    } = properties
+    
+  .screenboard
+    .screenboard__wrapper
+    
+      .screenboard__unit
+        .screenboard__title Orientation
+          .screenboard__options
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`orientation${id}`,
+              checked)
+              span.screenboard__text Horizontal
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`orientation${id}`)
+              span.screenboard__text Vertical
+
+      .screenboard__unit
+        .screenboard__title Number of sliders
+          .screenboard__options
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`range${id}`,
+              checked)
+              span.screenboard__text One
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`range${id}`)
+              span.screenboard__text Two
+
+      .screenboard__unit
+        .screenboard__title Display sup-numbers
+          .screenboard__options
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`sup-numbers${id}`,
+              checked)
+              span.screenboard__text No
+            label.screenboard__label
+              input.screenboard__radio(
+              type="radio",
+              name=`sup-numbers${id}`)
+              span.screenboard__text Yes
+
+          
