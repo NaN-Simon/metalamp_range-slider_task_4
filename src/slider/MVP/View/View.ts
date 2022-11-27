@@ -1,5 +1,6 @@
 import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
+import Ruler from './Ruler';
 
 class View {
   private hasSecondThumb: boolean;
@@ -12,12 +13,19 @@ class View {
 
   private thumbTo: Thumb | undefined;
 
+  private rulerElement: Ruler | undefined;
+
   constructor(sliderSelector: HTMLElement) {
     this.rangeSliderElement = sliderSelector as HTMLElement;
 
     this.hasSecondThumb = true;
     this.createProgressBar();
     this.createThumb();
+    this.createRuler();
+  }
+
+  createRuler() {
+    this.rulerElement = new Ruler(this.rangeSliderElement);
   }
 
   createProgressBar() {
