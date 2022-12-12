@@ -1,12 +1,13 @@
 interface IConfig {
-  min: number;
-  max: number;
-  range: boolean;
   valueFrom: number;
   valueTo: number;
   vertical: boolean;
 }
 
+interface ObserverDataValues{
+ value: IConfig;
+}
 export type {
   IConfig,
+  ObserverDataValues,
 };

@@ -1,6 +1,4 @@
 import './screenboard.scss';
-import config from '../slider/MVP/Model/config';
-import View from '../slider/MVP/View/View';
 
 class Screenboard {
   screenboardElement: HTMLElement;

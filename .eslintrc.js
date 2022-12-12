@@ -21,6 +21,7 @@ module.exports = {
   ],
   rules: {
     'linebreak-style': 0,
+    'lines-between-class-members': 'off',
     'no-plusplus': 0,
     'no-console': 'off',
   },

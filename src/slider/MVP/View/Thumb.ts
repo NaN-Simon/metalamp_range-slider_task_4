@@ -1,18 +1,14 @@
 import Observer from '../../Observer/Observer';
-
+import { IConfig, ObserverDataValues } from './types'
 class Thumb extends Observer<number> {
   private rangeSliderElement: HTMLElement;
-
   private progressBarElement: HTMLElement | undefined;
-
   private newThumbElement: HTMLElement | undefined;
 
   constructor(rangeSliderSelector: HTMLElement, HTMLclassName: string, dataName: string) {
     super();
     this.rangeSliderElement = rangeSliderSelector;
-
     this.progressBarElement = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement;
-
     this.createThumbElement(HTMLclassName, dataName);
 
     this.init();
@@ -52,11 +48,11 @@ class Thumb extends Observer<number> {
     return percent * 100;
   }
 
-  private createThumbElement(name: string, dataName: string): void {
+  private createThumbElement(HTMLclassName: string, dataName: string): void {
     this.newThumbElement = document.createElement('div');
     this.newThumbElement.classList.add('thumb-js');
     this.newThumbElement.classList.add('thumb');
-    this.newThumbElement.classList.add(name);
+    this.newThumbElement.classList.add(HTMLclassName);
     this.newThumbElement.setAttribute('data-name', dataName);
     if (this.progressBarElement) {
       this.progressBarElement.append(this.newThumbElement);

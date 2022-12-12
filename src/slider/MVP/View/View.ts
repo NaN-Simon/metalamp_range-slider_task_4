@@ -2,6 +2,7 @@ import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Ruler from './Ruler';
 import Observer from '../../Observer/Observer';
+import { IConfig } from '../Model/types'
 
 interface Ithumb{
   thumbFrom: number
@@ -28,9 +29,11 @@ class View extends Observer<Ithumb> {
 
   private rulerElement: Ruler | undefined;
 
-  constructor(/* sliderSelector: HTMLElement */) {
+  constructor(sliderSelector: HTMLElement) {
     super();
-    this.rangeSliderElement = document.querySelector('.slider-js') as HTMLElement;
+    this.rangeSliderElement = sliderSelector as HTMLElement;
+    console.log(this,this.rangeSliderElement);
+
     this.createProgressBar();
     this.createThumb();
     this.createRuler();
