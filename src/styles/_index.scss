@@ -18,6 +18,7 @@ html {
 
 .main-wrapper {
   display: flex;
+  flex-direction: column;
   gap: 20px;
   align-items: center;
   justify-content: center;
@@ -25,8 +26,16 @@ html {
   padding: 20px;
 }
 
-@media (max-width: 425px) {
-  .main-wrapper {
+.container{
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 525px) {
+  .container {
     flex-direction: column;
   }
 }

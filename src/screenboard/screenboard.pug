@@ -2,12 +2,15 @@ mixin screenboard(properties = {})
 
   -
     const {
-      id = 0
+      id = 0,
+      className = 'zero',
     } = properties
-    
-  .screenboard
+
+  .screenboard&attributes({
+    class: ['screenboard-js',`screenboard-${className}`]
+  })
     .screenboard__wrapper
-    
+
       .screenboard__unit
         .screenboard__title Orientation
           .screenboard__options
@@ -53,4 +56,8 @@ mixin screenboard(properties = {})
               name=`sup-numbers${id}`)
               span.screenboard__text Yes
 
-          
+      .screenboard__unit
+        .screenboard__title Values
+          input(type="text", name="valueFrom" placeholder='valueFrom')
+          input(type="text", name="valueTo" placeholder='valueTo')
+

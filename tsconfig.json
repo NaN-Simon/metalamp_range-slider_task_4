@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "sourceMap": true,    
+    "sourceMap": true,
     "alwaysStrict": true,
     "strict": true,
     "noImplicitAny": true,
@@ -14,5 +14,9 @@
     "noUnusedParameters": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "lib": [
+      "es2016",
+      "dom"
+  ]
   }
 }

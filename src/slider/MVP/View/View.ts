@@ -1,9 +1,22 @@
 import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Ruler from './Ruler';
+import Observer from '../../Observer/Observer';
 
-class View {
-  private hasSecondThumb: boolean;
+interface Ithumb{
+  thumbFrom: number
+  thumbTo: number
+}
+
+class View extends Observer<Ithumb> {
+  config: Ithumb = {
+    thumbFrom: 0,
+    thumbTo: 0,
+  };
+
+  valueFrom = 0;
+
+  valueTo = 0;
 
   private rangeSliderElement: HTMLElement;
 
@@ -15,34 +28,53 @@ class View {
 
   private rulerElement: Ruler | undefined;
 
-  constructor(sliderSelector: HTMLElement) {
-    this.rangeSliderElement = sliderSelector as HTMLElement;
-
-    this.hasSecondThumb = true;
+  constructor(/* sliderSelector: HTMLElement */) {
+    super();
+    this.rangeSliderElement = document.querySelector('.slider-js') as HTMLElement;
     this.createProgressBar();
     this.createThumb();
     this.createRuler();
+    this.updateConfig();
+    this.broadcast(this.config);
   }
 
-  createRuler() {
+  updateConfig() {
+    this.thumbFrom?.subscribe((value) => {
+      this.config.thumbFrom = value;
+      // console.log(this.config);
+      // console.log('from', this.valueFrom, 'to', this.valueTo);
+      this.broadcast(this.config);
+    });
+    // this.thumbFrom?.subscribe((value) => {
+    //   this.valueFrom = value;
+    //   console.log('from', this.valueFrom, 'to', this.valueTo);
+    // });
+    this.thumbTo?.subscribe((value) => {
+      this.config.thumbTo = value;
+      // console.log(this.config);
+      // console.log('from', this.valueFrom, 'to', this.valueTo);
+      this.broadcast(this.config);
+    });
+  }
+
+  /* Creating Elements */
+  private createRuler() {
     this.rulerElement = new Ruler(this.rangeSliderElement);
   }
 
-  createProgressBar() {
+  private createProgressBar() {
     this.progressBarElement = new ProgressBar(this.rangeSliderElement);
   }
 
-  createThumb() {
-    this.thumbFrom = new Thumb(this.rangeSliderElement, 'thumbFrom');
-    if (this.hasSecondThumb) {
-      this.thumbTo = new Thumb(this.rangeSliderElement, 'thumbTo');
-    }
+  private createThumb() {
+    this.thumbFrom = new Thumb(this.rangeSliderElement, 'thumbFrom', 'from');
+    this.thumbTo = new Thumb(this.rangeSliderElement, 'thumbTo', 'to');
   }
 }
 
-const newView = Array.from(document.querySelectorAll('.slider-js')) as Array<HTMLElement>;
-if (newView) {
-  newView.forEach((sliderSelector: HTMLElement) => new View(sliderSelector));
-}
+// const newView = Array.from(document.querySelectorAll('.slider-js')) as Array<HTMLElement>;
+// if (newView) {
+//   newView.forEach((sliderSelector: HTMLElement) => new View(sliderSelector));
+// }
 
 export default View;

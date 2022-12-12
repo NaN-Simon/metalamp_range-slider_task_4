@@ -1,21 +1,19 @@
-class Thumb {
-  private rangeSliderElement: HTMLElement;
+import Observer from '../../Observer/Observer';
 
-  private vertical: boolean;
+class Thumb extends Observer<number> {
+  private rangeSliderElement: HTMLElement;
 
   private progressBarElement: HTMLElement | undefined;
 
   private newThumbElement: HTMLElement | undefined;
 
-  constructor(rangeSliderSelector: HTMLElement, HTMLclassName: string) {
-    this.vertical = false;
-    console.log(rangeSliderSelector);
-
+  constructor(rangeSliderSelector: HTMLElement, HTMLclassName: string, dataName: string) {
+    super();
     this.rangeSliderElement = rangeSliderSelector;
 
     this.progressBarElement = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement;
 
-    this.createThumbElement(HTMLclassName);
+    this.createThumbElement(HTMLclassName, dataName);
 
     this.init();
   }
@@ -40,17 +38,26 @@ class Thumb {
     if (this.newThumbElement) {
       e.preventDefault();
       this.newThumbElement.ondragstart = () => false;
-      const rect = this.rangeSliderElement.getBoundingClientRect();
-      const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
-      this.newThumbElement.style.left = `${percent * 100}%`;
+      const thumbPosition = this.getThumbPosition(e);
+
+      this.broadcast(thumbPosition);
+
+      this.newThumbElement.style.left = `${thumbPosition}%`;
     }
   }
 
-  private createThumbElement(name: string): void {
+  private getThumbPosition(e: MouseEvent) {
+    const rect = this.rangeSliderElement.getBoundingClientRect();
+    const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
+    return percent * 100;
+  }
+
+  private createThumbElement(name: string, dataName: string): void {
     this.newThumbElement = document.createElement('div');
     this.newThumbElement.classList.add('thumb-js');
     this.newThumbElement.classList.add('thumb');
     this.newThumbElement.classList.add(name);
+    this.newThumbElement.setAttribute('data-name', dataName);
     if (this.progressBarElement) {
       this.progressBarElement.append(this.newThumbElement);
     }

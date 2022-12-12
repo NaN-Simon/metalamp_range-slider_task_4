@@ -1,19 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import './slider.scss';
 import './MVP/View/View.ts';
 
-$(() => {
-  console.log('The DOM is now loaded.');
-});
+import Model from './MVP/Model/Model'
+import View from './MVP/View/View';
+import Presentor from './MVP/Presenter/Presenter';
 
-declare global {
-  interface JQuery {
-    myPlugin(): void;
-  }
-}
-(function ($) {
-  jQuery.fn.myPlugin = function () {
-
-    // функционал
-
-  };
-}(jQuery));
+const app = new Presentor(new Model(), new View())

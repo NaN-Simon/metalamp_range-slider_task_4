@@ -41,8 +41,16 @@ html(lang="ru")
       h1 Range Slider
     main.main
       .main-wrapper
-        +screenboard({
-          id: '1'
-        })
-        .range-slider.slider-js
+        .container
+          +screenboard({
+            id: '1',
+            className: 'first',
+          })
+          .range-slider.slider-js
+        //- .container
+        //-   +screenboard({
+        //-     id: '2',
+        //-     className: 'second',
+        //-   })
+        //-   .range-slider.slider-js
 
