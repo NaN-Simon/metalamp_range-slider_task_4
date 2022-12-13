@@ -2,61 +2,44 @@ import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Ruler from './Ruler';
 import Observer from '../../Observer/Observer';
-import { IConfig } from '../Model/types'
+import { IConfig, ObserverDataValues } from './types';
 
-interface Ithumb{
-  thumbFrom: number
-  thumbTo: number
-}
-
-class View extends Observer<Ithumb> {
-  config: Ithumb = {
-    thumbFrom: 0,
-    thumbTo: 0,
+class View extends Observer<ObserverDataValues> {
+  config: IConfig = {
+    valueFrom: 0,
+    valueTo: 0,
+    vertical: false,
   };
 
-  valueFrom = 0;
-
-  valueTo = 0;
-
   private rangeSliderElement: HTMLElement;
-
   private progressBarElement: ProgressBar | undefined;
-
-  private thumbFrom: Thumb | undefined;
-
-  private thumbTo: Thumb | undefined;
-
+  private valueFrom: Thumb | undefined;
+  private valueTo: Thumb | undefined;
   private rulerElement: Ruler | undefined;
 
   constructor(sliderSelector: HTMLElement) {
     super();
     this.rangeSliderElement = sliderSelector as HTMLElement;
-    console.log(this,this.rangeSliderElement);
+    // console.log(this, this.rangeSliderElement);
 
     this.createProgressBar();
     this.createThumb();
     this.createRuler();
     this.updateConfig();
-    this.broadcast(this.config);
+    this.broadcast({ value: this.config });
   }
 
   updateConfig() {
-    this.thumbFrom?.subscribe((value) => {
-      this.config.thumbFrom = value;
-      // console.log(this.config);
-      // console.log('from', this.valueFrom, 'to', this.valueTo);
-      this.broadcast(this.config);
+    this.valueFrom?.subscribe(({ value }) => {
+      this.config.valueFrom = value;
+      this.broadcast({ value: this.config });
     });
-    // this.thumbFrom?.subscribe((value) => {
+    // this.valueFrom?.subscribe((value) => {
     //   this.valueFrom = value;
-    //   console.log('from', this.valueFrom, 'to', this.valueTo);
     // });
-    this.thumbTo?.subscribe((value) => {
-      this.config.thumbTo = value;
-      // console.log(this.config);
-      // console.log('from', this.valueFrom, 'to', this.valueTo);
-      this.broadcast(this.config);
+    this.valueTo?.subscribe(({ value }) => {
+      this.config.valueTo = value;
+      this.broadcast({ value: this.config });
     });
   }
 
@@ -70,8 +53,8 @@ class View extends Observer<Ithumb> {
   }
 
   private createThumb() {
-    this.thumbFrom = new Thumb(this.rangeSliderElement, 'thumbFrom', 'from');
-    this.thumbTo = new Thumb(this.rangeSliderElement, 'thumbTo', 'to');
+    this.valueFrom = new Thumb(this.rangeSliderElement, 'valueFrom', 'from');
+    this.valueTo = new Thumb(this.rangeSliderElement, 'valueTo', 'to');
   }
 }
 

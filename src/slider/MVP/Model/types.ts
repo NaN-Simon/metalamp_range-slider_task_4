@@ -3,3 +3,7 @@ export interface IConfig {
   valueTo: number;
   vertical: boolean;
 }
+
+export interface ObserverModelValues{
+   value: IConfig;
+  }

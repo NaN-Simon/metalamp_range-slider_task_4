@@ -1,44 +1,54 @@
 import Observer from '../../Observer/Observer';
 import defaultConfig from './defaultConfig';
-import { IConfig } from './types';
+import { IConfig, ObserverModelValues } from './types';
 
-class Model extends Observer<number> {
-  thumbFrom = 0;
-  thumbTo = 0;
+class Model extends Observer<ObserverModelValues> {
+  config: IConfig = {
+    valueFrom: 0,
+    valueTo: 0,
+    vertical: false,
+  };
+
   defaultConfig: IConfig;
-  protected config: IConfig | undefined;
+
+  // protected config: IConfig | undefined;
 
   constructor() {
     super();
     this.defaultConfig = defaultConfig;
   }
 
-  updateConfig(data: IConfig):void {
-    this.validateConfig(data);
-    // this.broadcast(this.config)
-  }
+  /* doesn't work beta start */
 
-  validateConfig(data: IConfig): IConfig {
-    this.config = data;
-    this.validateValueFrom();
-    this.validateValueTo();
-    return this.config;
-  }
+  // updateConfig(data: IConfig):void {
+  //   this.validateConfig(data);
+  //   // this.broadcast(this.config)
+  // }
 
-  validateValueFrom(): void {
-    if (this.config) {
-      this.config.valueFrom = this.defaultConfig.valueFrom;
-    }
-  }
-  validateValueTo(): void {
-    if (this.config) {
-      this.config.valueTo = this.defaultConfig.valueTo;
-    }
-  }
+  // validateConfig(data: IConfig): IConfig {
+  //   this.config = data;
+  //   this.validateValueFrom();
+  //   this.validateValueTo();
+  //   return this.config;
+  // }
 
-  logValue(data: {thumbFrom: number, thumbTo: number}) {
-    this.thumbFrom = data.thumbFrom;
-    this.thumbTo = data.thumbTo;
+  // validateValueFrom(): void {
+  //   if (this.config) {
+  //     this.config.valueFrom = this.defaultConfig.valueFrom;
+  //   }
+  // }
+  // validateValueTo(): void {
+  //   if (this.config) {
+  //     this.config.valueTo = this.defaultConfig.valueTo;
+  //   }
+  // }
+
+  /* doesn't work beta end */
+
+  logValue(data: IConfig) {
+    this.config.valueFrom = data.valueFrom;
+    this.config.valueTo = data.valueTo;
+    console.log(this.config);
   }
 }
 

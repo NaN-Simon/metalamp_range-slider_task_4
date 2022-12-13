@@ -1,6 +1,7 @@
 import Observer from '../../Observer/Observer';
-import { IConfig, ObserverDataValues } from './types'
-class Thumb extends Observer<number> {
+import { ObserverThumbValues } from './types';
+
+class Thumb extends Observer<ObserverThumbValues> {
   private rangeSliderElement: HTMLElement;
   private progressBarElement: HTMLElement | undefined;
   private newThumbElement: HTMLElement | undefined;
@@ -36,7 +37,7 @@ class Thumb extends Observer<number> {
       this.newThumbElement.ondragstart = () => false;
       const thumbPosition = this.getThumbPosition(e);
 
-      this.broadcast(thumbPosition);
+      this.broadcast({ value: thumbPosition });
 
       this.newThumbElement.style.left = `${thumbPosition}%`;
     }

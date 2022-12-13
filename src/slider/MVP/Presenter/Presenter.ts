@@ -3,7 +3,6 @@ import View from '../View/View';
 
 class Presentor {
   model: Model;
-
   view: View;
 
   constructor(model: Model, view: View) {
@@ -13,8 +12,8 @@ class Presentor {
   }
 
   subscribeView() {
-    this.view.subscribe((data: {thumbFrom: number, thumbTo: number}) => {
-      this.model.logValue(data);
+    this.view.subscribe((data) => {
+      this.model.logValue(data.value);
     });
   }
 }
