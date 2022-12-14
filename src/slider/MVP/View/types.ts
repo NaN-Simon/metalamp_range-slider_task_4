@@ -2,19 +2,21 @@ interface IConfig {
   valueFrom: number;
   valueTo: number;
   vertical: boolean;
+  floatValues: boolean;
 }
 
-interface ObserverDataValues{
+interface ObserverViewValues{
  value: IConfig;
-// value: number;
+ flow: string;
 }
 
 interface ObserverThumbValues{
-value: number;
+  value: number;
+  flow: string;
 }
 
 export type {
   IConfig,
-  ObserverDataValues,
+  ObserverViewValues,
   ObserverThumbValues,
 };

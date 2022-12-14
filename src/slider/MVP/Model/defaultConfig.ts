@@ -1,7 +1,8 @@
 const defaultConfig = {
-  valueFrom: 40,
-  valueTo: 70,
+  valueFrom: 5,
+  valueTo: 95,
   vertical: false,
+  floatValues: false,
 };
 
 export default defaultConfig;

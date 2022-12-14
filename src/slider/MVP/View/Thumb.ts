@@ -37,10 +37,12 @@ class Thumb extends Observer<ObserverThumbValues> {
       this.newThumbElement.ondragstart = () => false;
       const thumbPosition = this.getThumbPosition(e);
 
-      this.broadcast({ value: thumbPosition });
-
-      this.newThumbElement.style.left = `${thumbPosition}%`;
+      this.broadcast({ value: thumbPosition, flow: 'postitionThumb' });
     }
+  }
+
+  get thumbElement(){
+    return this.newThumbElement
   }
 
   private getThumbPosition(e: MouseEvent) {
@@ -53,7 +55,7 @@ class Thumb extends Observer<ObserverThumbValues> {
     this.newThumbElement = document.createElement('div');
     this.newThumbElement.classList.add('thumb-js');
     this.newThumbElement.classList.add('thumb');
-    this.newThumbElement.classList.add(HTMLclassName);
+    // this.newThumbElement.classList.add(HTMLclassName);
     this.newThumbElement.setAttribute('data-name', dataName);
     if (this.progressBarElement) {
       this.progressBarElement.append(this.newThumbElement);

@@ -1,28 +1,27 @@
 import Observer from '../../Observer/Observer';
-import defaultConfig from './defaultConfig';
 import { IConfig, ObserverModelValues } from './types';
-
+import defaultConfig from './defaultConfig'
 class Model extends Observer<ObserverModelValues> {
   config: IConfig = {
-    valueFrom: 0,
-    valueTo: 0,
-    vertical: false,
+    valueFrom: defaultConfig.valueFrom,
+    valueTo: defaultConfig.valueTo,
+    vertical: defaultConfig.vertical,
+    floatValues: defaultConfig.floatValues,
   };
-
-  defaultConfig: IConfig;
 
   // protected config: IConfig | undefined;
 
   constructor() {
     super();
-    this.defaultConfig = defaultConfig;
+    // this.updateConfig(this.config)
+    // console.log(this.config)
   }
 
   /* doesn't work beta start */
 
   // updateConfig(data: IConfig):void {
   //   this.validateConfig(data);
-  //   // this.broadcast(this.config)
+  //   this.broadcast({ value: this.config, flow: 'default' });
   // }
 
   // validateConfig(data: IConfig): IConfig {
@@ -45,10 +44,19 @@ class Model extends Observer<ObserverModelValues> {
 
   /* doesn't work beta end */
 
-  logValue(data: IConfig) {
-    this.config.valueFrom = data.valueFrom;
-    this.config.valueTo = data.valueTo;
+  setValue(data: IConfig) {
+    if(this.config.floatValues === false){
+      this.config.valueFrom = Math.floor(data.valueFrom);
+      this.config.valueTo = Math.floor(data.valueTo);
+    } else {
+      this.config.valueFrom = data.valueFrom;
+      this.config.valueTo = data.valueTo;
+    }
+    // console.log(data.valueFrom, data.valueTo);
+    // console.log(data);
     console.log(this.config);
+
+    this.broadcast({value: this.config, flow: 'displayValue'})
   }
 }
 
