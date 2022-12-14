@@ -12,16 +12,18 @@
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 7px;
+  height: 14px;
   background-color: $progressBarColor;
+  border-radius: 7px;
 }
 
 .thumb {
   position: absolute;
   top: -50%;
   left: 0%;
-  height: 200%;
+  height: 180%;
   background-color: $thumbColor;
+  border: 3px solid $mainBackground;
   border-radius: 50%;
   transform: translateX(-50%);
   transition: transform 150ms ease-in-out;
@@ -41,7 +43,7 @@
   justify-content: space-between;
   width: 100%;
   height: 10px;
-  padding-top: 8px;
+  padding-top: 10px;
 
   &-separator{
     width: 2px;
