@@ -9,6 +9,7 @@ class View extends Observer<ObserverViewValues> {
   config: IConfig = {
     valueFrom: defaltConfig.valueFrom,
     valueTo: defaltConfig.valueTo,
+    gap: defaltConfig.gap,
     vertical: defaltConfig.vertical,
     floatValues: defaltConfig.floatValues,
   };
@@ -30,11 +31,13 @@ class View extends Observer<ObserverViewValues> {
   }
 
   updateConfig() {
-    this.valueFrom?.subscribe(({ value }) => { // flow: 'postitionThumb'
+    this.valueFrom?.subscribe(({ value }) => {
+      // flow: 'postitionThumb'
       this.config.valueFrom = value;
       this.broadcast({ value: this.config, flow: 'configValue' });
     });
-    this.valueTo?.subscribe(({ value }) => { // flow: 'postitionThumb'
+    this.valueTo?.subscribe(({ value }) => {
+      // flow: 'postitionThumb'
       this.config.valueTo = value;
       this.broadcast({ value: this.config, flow: 'configValue' });
     });
@@ -45,10 +48,14 @@ class View extends Observer<ObserverViewValues> {
 
     if (data.flow === 'displayValue') {
       if (this.valueFrom && this.valueFrom.thumbElement) {
-        this.valueFrom.thumbElement.style.left = `${data.value.valueFrom}%`;
+        if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
+          this.valueFrom.thumbElement.style.left = `${data.value.valueFrom}%`;
+        }
       }
       if (this.valueTo && this.valueTo.thumbElement) {
-        this.valueTo.thumbElement.style.left = `${data.value.valueTo}%`;
+        if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
+          this.valueTo.thumbElement.style.left = `${data.value.valueTo}%`;
+        }
       }
     }
   }

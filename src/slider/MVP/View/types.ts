@@ -1,6 +1,7 @@
 interface IConfig {
   valueFrom: number;
   valueTo: number;
+  gap: number,
   vertical: boolean;
   floatValues: boolean;
 }

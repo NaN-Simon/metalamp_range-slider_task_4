@@ -41,8 +41,8 @@ class Thumb extends Observer<ObserverThumbValues> {
     }
   }
 
-  get thumbElement(){
-    return this.newThumbElement
+  get thumbElement() {
+    return this.newThumbElement;
   }
 
   private getThumbPosition(e: MouseEvent) {

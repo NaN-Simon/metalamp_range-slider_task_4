@@ -5,16 +5,20 @@ class Model extends Observer<ObserverModelValues> {
   config: IConfig = {
     valueFrom: defaultConfig.valueFrom,
     valueTo: defaultConfig.valueTo,
+    gap: defaultConfig.gap,
     vertical: defaultConfig.vertical,
     floatValues: defaultConfig.floatValues,
   };
-
-  // protected config: IConfig | undefined;
 
   constructor() {
     super();
     // this.updateConfig(this.config)
     // console.log(this.config)
+    this.beta()
+  }
+
+  beta(){
+
   }
 
   /* doesn't work beta start */
