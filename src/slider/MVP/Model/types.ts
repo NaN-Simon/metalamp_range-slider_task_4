@@ -1,4 +1,6 @@
 export interface IConfig {
+  min: number,
+  max: number,
   valueFrom: number;
   valueTo: number;
   gap: number,

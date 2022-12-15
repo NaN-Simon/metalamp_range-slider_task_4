@@ -1,4 +1,6 @@
 interface IConfig {
+  min: number,
+  max: number,
   valueFrom: number;
   valueTo: number;
   gap: number,
@@ -16,8 +18,14 @@ interface ObserverThumbValues{
   flow: string;
 }
 
+interface ObserverRulerValues{
+  value: number;
+  flow: string;
+}
+
 export type {
   IConfig,
   ObserverViewValues,
   ObserverThumbValues,
+  ObserverRulerValues
 };

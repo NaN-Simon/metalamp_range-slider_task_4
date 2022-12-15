@@ -7,6 +7,8 @@ import defaltConfig from '../Model/defaultConfig';
 
 class View extends Observer<ObserverViewValues> {
   config: IConfig = {
+    min: defaltConfig.min,
+    max: defaltConfig.max,
     valueFrom: defaltConfig.valueFrom,
     valueTo: defaltConfig.valueTo,
     gap: defaltConfig.gap,
@@ -45,7 +47,7 @@ class View extends Observer<ObserverViewValues> {
 
   renderThumbValues(data: ObserverViewValues) {
     // console.log(data);
-
+    
     if (data.flow === 'displayValue') {
       if (this.valueFrom && this.valueFrom.thumbElement) {
         if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
@@ -61,8 +63,13 @@ class View extends Observer<ObserverViewValues> {
   }
 
   /* Creating Elements */
+
   private createRuler() {
     this.rulerElement = new Ruler(this.rangeSliderElement);
+    this.rulerElement.createRulerElement(
+      defaltConfig.min,
+      defaltConfig.max,
+      )
   }
 
   private createProgressBar() {
@@ -70,11 +77,17 @@ class View extends Observer<ObserverViewValues> {
   }
 
   private createThumb() {
-    this.valueFrom = new Thumb(this.rangeSliderElement, 'thumbFrom', 'from');
+    this.valueFrom = new Thumb(
+      this.rangeSliderElement, 
+      'thumbFrom', 
+      'from');
     if (this.valueFrom && this.valueFrom.thumbElement) {
       this.valueFrom.thumbElement.style.left = `${defaltConfig.valueFrom}%`;
     }
-    this.valueTo = new Thumb(this.rangeSliderElement, 'thumbTo', 'to');
+    this.valueTo = new Thumb(
+      this.rangeSliderElement, 
+      'thumbTo', 
+      'to');
     if (this.valueTo && this.valueTo.thumbElement) {
       this.valueTo.thumbElement.style.left = `${defaltConfig.valueTo}%`;
     }
