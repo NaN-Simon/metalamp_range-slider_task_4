@@ -34,20 +34,16 @@ class View extends Observer<ObserverViewValues> {
 
   updateConfig() {
     this.valueFrom?.subscribe(({ value }) => {
-      // flow: 'postitionThumb'
       this.config.valueFrom = value;
       this.broadcast({ value: this.config, flow: 'configValue' });
     });
     this.valueTo?.subscribe(({ value }) => {
-      // flow: 'postitionThumb'
       this.config.valueTo = value;
       this.broadcast({ value: this.config, flow: 'configValue' });
     });
   }
 
   renderThumbValues(data: ObserverViewValues) {
-    // console.log(data);
-    
     if (data.flow === 'displayValue') {
       if (this.valueFrom && this.valueFrom.thumbElement) {
         if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
@@ -69,7 +65,7 @@ class View extends Observer<ObserverViewValues> {
     this.rulerElement.createRulerElement(
       defaltConfig.min,
       defaltConfig.max,
-      )
+    );
   }
 
   private createProgressBar() {
@@ -78,16 +74,18 @@ class View extends Observer<ObserverViewValues> {
 
   private createThumb() {
     this.valueFrom = new Thumb(
-      this.rangeSliderElement, 
-      'thumbFrom', 
-      'from');
+      this.rangeSliderElement,
+      'thumbFrom',
+      'from',
+    );
     if (this.valueFrom && this.valueFrom.thumbElement) {
       this.valueFrom.thumbElement.style.left = `${defaltConfig.valueFrom}%`;
     }
     this.valueTo = new Thumb(
-      this.rangeSliderElement, 
-      'thumbTo', 
-      'to');
+      this.rangeSliderElement,
+      'thumbTo',
+      'to',
+    );
     if (this.valueTo && this.valueTo.thumbElement) {
       this.valueTo.thumbElement.style.left = `${defaltConfig.valueTo}%`;
     }

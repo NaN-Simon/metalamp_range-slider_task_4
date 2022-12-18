@@ -1,6 +1,7 @@
 import Observer from '../../Observer/Observer';
 import { IConfig, ObserverModelValues } from './types';
-import defaultConfig from './defaultConfig'
+import defaultConfig from './defaultConfig';
+
 class Model extends Observer<ObserverModelValues> {
   config: IConfig = {
     min: defaultConfig.min,
@@ -13,16 +14,15 @@ class Model extends Observer<ObserverModelValues> {
   };
 
   setValue(data: IConfig) {
-    if(this.config.floatValues === false){
-      this.config.valueFrom = Math.floor(data.valueFrom);
-      this.config.valueTo = Math.floor(data.valueTo);
+    if (this.config.floatValues === true) {
+      this.config.valueFrom = Math.floor(data.valueFrom / this.config.gap) * this.config.gap;
+      this.config.valueTo = Math.floor(data.valueTo / this.config.gap) * this.config.gap;
     } else {
       this.config.valueFrom = data.valueFrom;
       this.config.valueTo = data.valueTo;
     }
-    console.log(this.config);
 
-    this.broadcast({value: this.config, flow: 'displayValue'})
+    this.broadcast({ value: this.config, flow: 'displayValue' });
   }
 }
 

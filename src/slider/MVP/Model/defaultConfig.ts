@@ -1,11 +1,11 @@
 const defaultConfig = {
-  min: -5,
-  max: 11,
-  valueFrom: 5,
-  valueTo: 95,
-  gap: 5,
+  min: 0,
+  max: 10,
+  valueFrom: 0,
+  valueTo: 100,
+  gap: 10,
   vertical: false,
-  floatValues: false,
+  floatValues: true,
 };
 
 export default defaultConfig;
