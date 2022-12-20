@@ -1,9 +1,9 @@
 const defaultConfig = {
-  min: 0,
-  max: 10,
-  valueFrom: 0,
+  min: 10,
+  max: 40,
+  valueFrom: 10,
   valueTo: 100,
-  gap: 10,
+  gap: 1,
   vertical: false,
   floatValues: true,
 };

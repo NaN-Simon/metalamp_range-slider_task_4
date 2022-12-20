@@ -2,8 +2,9 @@ import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Ruler from './Ruler';
 import Observer from '../../Observer/Observer';
-import { IConfig, ObserverViewValues } from './types';
+import { IConfig, ObserverPrompValues, ObserverViewValues } from './types';
 import defaltConfig from '../Model/defaultConfig';
+import Promp from './Promp';
 
 class View extends Observer<ObserverViewValues> {
   config: IConfig = {
@@ -21,6 +22,8 @@ class View extends Observer<ObserverViewValues> {
   private valueFrom: Thumb | undefined;
   private valueTo: Thumb | undefined;
   private rulerElement: Ruler | undefined;
+  private prompValueFrom: Promp | undefined;
+  private prompValueTo: Promp | undefined;
 
   constructor(sliderSelector: HTMLElement) {
     super();
@@ -29,6 +32,7 @@ class View extends Observer<ObserverViewValues> {
     this.createProgressBar();
     this.createThumb();
     this.createRuler();
+    this.createPromp();
     this.updateConfig();
   }
 
@@ -41,6 +45,8 @@ class View extends Observer<ObserverViewValues> {
       this.config.valueTo = value;
       this.broadcast({ value: this.config, flow: 'configValue' });
     });
+    this.prompValueFrom?.updateConfig(this.config);
+    this.prompValueTo?.updateConfig(this.config);
   }
 
   renderThumbValues(data: ObserverViewValues) {
@@ -55,6 +61,15 @@ class View extends Observer<ObserverViewValues> {
           this.valueTo.thumbElement.style.left = `${data.value.valueTo}%`;
         }
       }
+    }
+  }
+
+  renderPrompValues(data: ObserverViewValues) {
+    if (this.prompValueFrom && this.prompValueFrom.prompElement) {
+      this.prompValueFrom.prompElement.innerHTML = data.value.valueFrom.toString();
+    }
+    if (this.prompValueTo && this.prompValueTo.prompElement) {
+      this.prompValueTo.prompElement.innerHTML = data.value.valueTo.toString();
     }
   }
 
@@ -81,6 +96,7 @@ class View extends Observer<ObserverViewValues> {
     if (this.valueFrom && this.valueFrom.thumbElement) {
       this.valueFrom.thumbElement.style.left = `${defaltConfig.valueFrom}%`;
     }
+
     this.valueTo = new Thumb(
       this.rangeSliderElement,
       'thumbTo',
@@ -88,6 +104,19 @@ class View extends Observer<ObserverViewValues> {
     );
     if (this.valueTo && this.valueTo.thumbElement) {
       this.valueTo.thumbElement.style.left = `${defaltConfig.valueTo}%`;
+    }
+  }
+
+  private createPromp() {
+    if (this.valueFrom && this.valueFrom.thumbElement) {
+      this.prompValueFrom = new Promp(this.valueFrom.thumbElement);
+      this.prompValueFrom.createPrompElement();
+      this.prompValueFrom.firstPrompLoad(this.config.valueFrom)
+    }
+    if (this.valueTo && this.valueTo.thumbElement) {
+      this.prompValueTo = new Promp(this.valueTo.thumbElement);
+      this.prompValueTo.createPrompElement();
+      this.prompValueTo.firstPrompLoad(this.config.valueTo)
     }
   }
 }

@@ -23,9 +23,15 @@ interface ObserverRulerValues{
   flow: string;
 }
 
+interface ObserverPrompValues{
+  value: number;
+  flow: string;
+}
+
 export type {
   IConfig,
   ObserverViewValues,
   ObserverThumbValues,
-  ObserverRulerValues
+  ObserverRulerValues,
+  ObserverPrompValues
 };

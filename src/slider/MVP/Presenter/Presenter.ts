@@ -14,17 +14,20 @@ class Presentor {
 
   subscribeView() {
     this.view.subscribe((data) => {
-      if (data.flow === 'configValue'){
+      if (data.flow === 'configValue') {
         this.model.setValue(data.value);
       }
     });
   }
 
-  subscribeModel(){
+  subscribeModel() {
     this.model.subscribe((data) => {
-      this.view.renderThumbValues(data)
-    }
-    )}
+      this.view.renderThumbValues(data);
+      // console.log(data.value.valueFrom.toString());
+
+      this.view.renderPrompValues(data);
+    });
+  }
 }
 
 export default Presentor;

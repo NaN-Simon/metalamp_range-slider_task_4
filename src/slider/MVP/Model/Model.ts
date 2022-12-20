@@ -16,6 +16,8 @@ class Model extends Observer<ObserverModelValues> {
   setValue(data: IConfig) {
     if (this.config.floatValues === true) {
       this.config.valueFrom = Math.floor(data.valueFrom / this.config.gap) * this.config.gap;
+      // console.log(this.config.valueFrom);
+
       this.config.valueTo = Math.floor(data.valueTo / this.config.gap) * this.config.gap;
     } else {
       this.config.valueFrom = data.valueFrom;
