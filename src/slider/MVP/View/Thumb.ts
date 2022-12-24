@@ -36,8 +36,13 @@ class Thumb extends Observer<ObserverThumbValues> {
       e.preventDefault();
       this.newThumbElement.ondragstart = () => false;
       const thumbPosition = this.getThumbPosition(e);
+      // console.log(thumbPosition.rectWidth);
 
-      this.broadcast({ value: thumbPosition, flow: 'postitionThumb' });
+      this.broadcast({
+        value: thumbPosition.percent,
+        rectWidth: thumbPosition.rectWidth,
+        flow: 'postitionThumb',
+      });
     }
   }
 
@@ -45,9 +50,15 @@ class Thumb extends Observer<ObserverThumbValues> {
     return this.newThumbElement;
   }
 
-  private getThumbPosition(e: MouseEvent) {
-    const rect = this.rangeSliderElement.getBoundingClientRect();
-    const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
+  private getThumbPosition(e: MouseEvent): any {
+    const rect = this.rangeSliderElement.getBoundingClientRect() as DOMRect;
+    const rectWidth = rect.width;
+    // console.log(rect);
+
+    const percent = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+    // console.log((percent * 100 * rect.width) / 100)
+
+    return { percent, rectWidth };
     return percent * 100;
   }
 
@@ -59,6 +70,12 @@ class Thumb extends Observer<ObserverThumbValues> {
     this.newThumbElement.setAttribute('data-name', dataName);
     if (this.progressBarElement) {
       this.progressBarElement.append(this.newThumbElement);
+    }
+  }
+
+  firstThumbLoad(value: number) {
+    if (this.newThumbElement) {
+      this.newThumbElement.style.left = `${value}%`;
     }
   }
 }

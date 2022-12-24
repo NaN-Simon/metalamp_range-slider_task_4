@@ -5,7 +5,8 @@ export interface IConfig {
   valueTo: number;
   gap: number,
   vertical: boolean;
-  floatValues: boolean;
+  isFloatValues: boolean;
+  rectWidth: number;
 }
 
 export interface ObserverModelValues{

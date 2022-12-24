@@ -2,7 +2,7 @@ import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Ruler from './Ruler';
 import Observer from '../../Observer/Observer';
-import { IConfig, ObserverPrompValues, ObserverViewValues } from './types';
+import { IConfig, ObserverViewValues } from './types';
 import defaltConfig from '../Model/defaultConfig';
 import Promp from './Promp';
 
@@ -14,7 +14,8 @@ class View extends Observer<ObserverViewValues> {
     valueTo: defaltConfig.valueTo,
     gap: defaltConfig.gap,
     vertical: defaltConfig.vertical,
-    floatValues: defaltConfig.floatValues,
+    isFloatValues: defaltConfig.isFloatValues,
+    rectWidth: defaltConfig.rectWidth,
   };
 
   private rangeSliderElement: HTMLElement;
@@ -24,6 +25,7 @@ class View extends Observer<ObserverViewValues> {
   private rulerElement: Ruler | undefined;
   private prompValueFrom: Promp | undefined;
   private prompValueTo: Promp | undefined;
+  // private rectWidth: number | undefined;
 
   constructor(sliderSelector: HTMLElement) {
     super();
@@ -36,30 +38,39 @@ class View extends Observer<ObserverViewValues> {
     this.updateConfig();
   }
 
-  updateConfig() {
-    this.valueFrom?.subscribe(({ value }) => {
-      this.config.valueFrom = value;
-      this.broadcast({ value: this.config, flow: 'configValue' });
+  updateConfig(): any {
+    this.valueFrom?.subscribe((data) => {
+      if (data.flow === 'postitionThumb') {
+        this.config.valueFrom = data.value;
+        this.config.rectWidth = data.rectWidth
+        console.log(this.config.rectWidth, data.rectWidth);
+
+        this.broadcast({ value: this.config, flow: 'configValue' });
+      }
     });
-    this.valueTo?.subscribe(({ value }) => {
-      this.config.valueTo = value;
-      this.broadcast({ value: this.config, flow: 'configValue' });
+
+    this.valueTo?.subscribe((data) => {
+      if (data.flow === 'postitionThumb') {
+        this.config.valueTo = data.value;
+        this.config.rectWidth = data.rectWidth
+        // console.log(data.rectWidth);
+        this.broadcast({ value: this.config, flow: 'configValue' });
+      }
     });
-    this.prompValueFrom?.updateConfig(this.config);
-    this.prompValueTo?.updateConfig(this.config);
   }
 
   renderThumbValues(data: ObserverViewValues) {
+    // todo: переписать закоменченый код, т.к значение всеравно меняется.
     if (data.flow === 'displayValue') {
       if (this.valueFrom && this.valueFrom.thumbElement) {
-        if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
-          this.valueFrom.thumbElement.style.left = `${data.value.valueFrom}%`;
-        }
+        // if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
+        this.valueFrom.thumbElement.style.left = `${data.value.valueFrom}px`;
+        // }
       }
       if (this.valueTo && this.valueTo.thumbElement) {
-        if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
-          this.valueTo.thumbElement.style.left = `${data.value.valueTo}%`;
-        }
+        // if (data.value.valueTo - data.value.valueFrom >= data.value.gap) {
+        this.valueTo.thumbElement.style.left = `${data.value.valueTo}px`;
+        // }
       }
     }
   }
@@ -80,6 +91,7 @@ class View extends Observer<ObserverViewValues> {
     this.rulerElement.createRulerElement(
       defaltConfig.min,
       defaltConfig.max,
+      defaltConfig.gap,
     );
   }
 
@@ -94,7 +106,7 @@ class View extends Observer<ObserverViewValues> {
       'from',
     );
     if (this.valueFrom && this.valueFrom.thumbElement) {
-      this.valueFrom.thumbElement.style.left = `${defaltConfig.valueFrom}%`;
+      this.valueFrom.firstThumbLoad(defaltConfig.valueFrom);
     }
 
     this.valueTo = new Thumb(
@@ -103,20 +115,18 @@ class View extends Observer<ObserverViewValues> {
       'to',
     );
     if (this.valueTo && this.valueTo.thumbElement) {
-      this.valueTo.thumbElement.style.left = `${defaltConfig.valueTo}%`;
+      this.valueTo.firstThumbLoad(defaltConfig.valueTo);
     }
   }
 
   private createPromp() {
     if (this.valueFrom && this.valueFrom.thumbElement) {
       this.prompValueFrom = new Promp(this.valueFrom.thumbElement);
-      this.prompValueFrom.createPrompElement();
-      this.prompValueFrom.firstPrompLoad(this.config.valueFrom)
+      this.prompValueFrom.firstPrompLoad(this.config.valueFrom);
     }
     if (this.valueTo && this.valueTo.thumbElement) {
       this.prompValueTo = new Promp(this.valueTo.thumbElement);
-      this.prompValueTo.createPrompElement();
-      this.prompValueTo.firstPrompLoad(this.config.valueTo)
+      this.prompValueTo.firstPrompLoad(this.config.valueTo);
     }
   }
 }

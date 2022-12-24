@@ -10,15 +10,22 @@ class Model extends Observer<ObserverModelValues> {
     valueTo: defaultConfig.valueTo,
     gap: defaultConfig.gap,
     vertical: defaultConfig.vertical,
-    floatValues: defaultConfig.floatValues,
+    isFloatValues: defaultConfig.isFloatValues,
+    rectWidth: defaultConfig.rectWidth,
   };
 
   setValue(data: IConfig) {
-    if (this.config.floatValues === true) {
-      this.config.valueFrom = Math.floor(data.valueFrom / this.config.gap) * this.config.gap;
-      // console.log(this.config.valueFrom);
+    console.log(this.config.rectWidth);
 
-      this.config.valueTo = Math.floor(data.valueTo / this.config.gap) * this.config.gap;
+    if (this.config.isFloatValues === true) {
+      if (data.valueTo - data.valueFrom >= data.gap) {
+        this.config.valueFrom = Math.floor(data.valueFrom / this.config.gap) * this.config.gap;
+        // console.log(this.config.valueFrom);
+
+        this.config.valueTo = Math.floor(data.valueTo / this.config.gap) * this.config.gap;
+        // console.log(this.config.valueTo);
+        // console.log((Math.ceil(this.config.max - this.config.min) + 1));
+      }
     } else {
       this.config.valueFrom = data.valueFrom;
       this.config.valueTo = data.valueTo;

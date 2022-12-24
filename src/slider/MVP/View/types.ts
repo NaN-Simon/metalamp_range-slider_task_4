@@ -5,7 +5,8 @@ interface IConfig {
   valueTo: number;
   gap: number,
   vertical: boolean;
-  floatValues: boolean;
+  isFloatValues: boolean;
+  rectWidth: number;
 }
 
 interface ObserverViewValues{
@@ -15,15 +16,11 @@ interface ObserverViewValues{
 
 interface ObserverThumbValues{
   value: number;
+  rectWidth: number;
   flow: string;
 }
 
 interface ObserverRulerValues{
-  value: number;
-  flow: string;
-}
-
-interface ObserverPrompValues{
   value: number;
   flow: string;
 }
@@ -33,5 +30,4 @@ export type {
   ObserverViewValues,
   ObserverThumbValues,
   ObserverRulerValues,
-  ObserverPrompValues
 };

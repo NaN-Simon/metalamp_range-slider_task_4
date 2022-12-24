@@ -1,31 +1,24 @@
-import Observer from '../../Observer/Observer';
-import { IConfig, ObserverPrompValues } from './types';
+import { IConfig } from './types';
 
-class Promp extends Observer<ObserverPrompValues> {
-  private rangeSliderElement: HTMLElement;
+class Promp {
   private newPrompElement: HTMLElement | undefined;
-  config: IConfig | undefined;
-  valueFrom: HTMLElement | null;
+  private config: IConfig | undefined;
+  private thumbElement: HTMLElement | null;
 
-  constructor(rangeSliderSelector: HTMLElement) {
-    super();
-    this.rangeSliderElement = rangeSliderSelector;
-    this.valueFrom = rangeSliderSelector;
+  constructor(thumbSelector: HTMLElement) {
+    this.thumbElement = thumbSelector;
+    this.createPrompElement()
   }
 
   get prompElement() {
     return this.newPrompElement;
   }
 
-  updateConfig(value: IConfig): void {
-    this.config = value;
-  }
-
-  createPrompElement() {
+  private createPrompElement() {
     this.newPrompElement = document.createElement('div');
     this.newPrompElement.classList.add('promp');
     this.newPrompElement.innerHTML = '10000';
-    this.valueFrom?.append(this.newPrompElement);
+    this.thumbElement?.append(this.newPrompElement);
   }
 
   firstPrompLoad(value: number) {
