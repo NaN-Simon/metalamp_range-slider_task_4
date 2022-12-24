@@ -1,0 +1,10 @@
+@import "./reset";
+@import "./fonts";
+@import "./base";
+@import "./rangeSlider.scss";
+
+html {
+  color: #000000;
+  font-size: 14px;
+  font-family: $mainFont;
+}

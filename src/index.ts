@@ -1,6 +1,3 @@
-import './styles/_reset.scss';
-import './styles/_fonts.scss';
-import './styles/_index.scss';
-
-import './slider/slider.ts';
-import './screenboard/screenboard.ts';
+import './styles/reset.scss';
+import './styles/fonts.scss';
+import './styles/index.scss';
