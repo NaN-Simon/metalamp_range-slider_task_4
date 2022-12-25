@@ -20,6 +20,8 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
     'linebreak-style': 0,
     'lines-between-class-members': 'off',
     'no-plusplus': 0,

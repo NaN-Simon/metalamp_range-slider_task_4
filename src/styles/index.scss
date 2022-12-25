@@ -8,3 +8,19 @@ html {
   font-size: 14px;
   font-family: $mainFont;
 }
+
+.header{
+  &__container{
+  padding: 0 30px;
+  }
+  
+  &__title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.main__container{
+  padding: 0 30px;
+}
