@@ -1,6 +1,6 @@
-import { IConfig } from "./types";
+import { IConfig } from './types';
 
-//tempConfig удалить после настройки Presenter
+// tempConfig удалить после настройки Presenter
 const tempConfig = {
   min: -1.9,
   max: 7.2,
@@ -11,8 +11,8 @@ const tempConfig = {
   isFloatValues: true,
   hasRuler: true,
   hasPromp: true,
-}
-export default class Scale{
+};
+export default class Scale {
   protected config!: IConfig;
 
   private rangeSliderElement: HTMLElement;
@@ -27,21 +27,21 @@ export default class Scale{
     this.config = value;
   }
 
-  createScale(){
-    this.scale = document.createElement('div')
-    this.scale.classList.add('scale')
-    for(let i = tempConfig.min; i <= tempConfig.max; i = i +tempConfig.step){
-      const scaleSeparator = document.createElement('div')
-      scaleSeparator.classList.add('scale__separator')
+  createScale() {
+    this.scale = document.createElement('div');
+    this.scale.classList.add('scale');
+    for (let i = tempConfig.min; i <= tempConfig.max; i += tempConfig.step) {
+      const scaleSeparator = document.createElement('div');
+      scaleSeparator.classList.add('scale__separator');
       scaleSeparator.innerHTML = i.toFixed(1).toString();
-      this.scale.append(scaleSeparator)
+      this.scale.append(scaleSeparator);
     }
-    if(tempConfig.max % 1 !== 0){
-      const scaleSeparator = document.createElement('div')
-      scaleSeparator.classList.add('scale__separator')
+    if (tempConfig.max % 1 !== 0) {
+      const scaleSeparator = document.createElement('div');
+      scaleSeparator.classList.add('scale__separator');
       scaleSeparator.innerHTML = tempConfig.max.toString();
-      this.scale.append(scaleSeparator)
+      this.scale.append(scaleSeparator);
     }
-    this.rangeSliderElement.append(this.scale)
+    this.rangeSliderElement.append(this.scale);
   }
 }

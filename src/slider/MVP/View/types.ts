@@ -10,7 +10,19 @@ export interface IConfig {
   hasPromp: boolean,
 }
 
-export interface ObserverView {
+export interface IViewPositionValue {
+  position: number,
+  value: IConfig,
+  flow: string,
+}
+
+export interface IThumbPositionValue {
+  position: number,
+  value: number,
+  type: string,
+}
+
+export interface IObserverConfig {
   value: IConfig,
   flow: string,
 }
