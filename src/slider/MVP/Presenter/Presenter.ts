@@ -15,12 +15,19 @@ export default class Presenter {
 
   subscribeView() {
     this.view.subscribe((data) => {
-      this.model.updateConfig(data.value);
+      if(data.flow === 'configValue'){
+        // console.log(data);
+
+        this.model.updateConfig(data.value, data.position);
+      }
     });
   }
+
   subscribeModel() {
     this.model.subscribe((data) => {
-      this.view.thumbRenderTest(data);
+      if(data.flow === 'displayValue'){
+        this.view.thumbRenderTest(data);
+      }
     });
   }
 }

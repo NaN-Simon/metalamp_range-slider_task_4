@@ -11,13 +11,13 @@ export interface IConfig {
 }
 
 export interface IViewPositionValue {
-  position: number,
+  position: DOMRect,
   value: IConfig,
   flow: string,
 }
 
 export interface IThumbPositionValue {
-  position: number,
+  position: DOMRect,
   value: number,
   type: string,
 }

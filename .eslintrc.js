@@ -26,5 +26,6 @@ module.exports = {
     'lines-between-class-members': 'off',
     'no-plusplus': 0,
     'no-console': 'off',
+    'no-unused-expressions': false,
   },
 };

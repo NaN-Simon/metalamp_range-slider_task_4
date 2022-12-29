@@ -13,6 +13,7 @@ export default class Thumb extends Observer<IThumbPositionValue> {
     this.rangeSliderElement = rangeSliderSelector;
     this.dataName = dataName;
     this.createThumb();
+
     this.clickHandlerThumb();
   }
 
@@ -49,7 +50,7 @@ export default class Thumb extends Observer<IThumbPositionValue> {
     const rect = this.rangeSliderElement.getBoundingClientRect() as DOMRect;
     const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
 
-    return shift;
+    return rect;
   }
 
   private onMouseDown() {
