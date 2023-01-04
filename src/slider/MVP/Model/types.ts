@@ -1,3 +1,4 @@
+//+
 export interface IConfig {
   min: number,
   max: number,
@@ -9,8 +10,13 @@ export interface IConfig {
   hasRuler: boolean,
   hasPromp: boolean,
 }
-
-export interface ObserverModel {
+//+
+export interface ModelValues {
   value: IConfig,
-  flow: string,
+  type: 'configChanged';
+}
+//+
+export interface IPositionValues {
+  value: IConfig;
+  nameState: string;
 }

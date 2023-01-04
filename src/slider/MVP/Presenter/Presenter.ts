@@ -8,26 +8,24 @@ export default class Presenter {
   constructor(model: Model, view: View) {
     this.model = model;
     this.view = view;
-    this.view.initConfig(this.model.getConfig);
-    this.subscribeView();
     this.subscribeModel();
+    this.subscribeView();
   }
 
-  subscribeView() {
+  private subscribeView(): void {
     this.view.subscribe((data) => {
-      if(data.flow === 'configValue'){
-        // console.log(data);
-
-        this.model.updateConfig(data.value, data.position);
-      }
+          if(data.type === 'viewChanged'){
+            this.model.checkPositionValues(data.value);
+          }
     });
   }
 
-  subscribeModel() {
+  private subscribeModel(): void {
     this.model.subscribe((data) => {
-      if(data.flow === 'displayValue'){
-        this.view.thumbRenderTest(data);
-      }
+          if(data.type === 'configChanged'){
+            this.view.setConfig(data.value);
+          }
     });
   }
+
 }

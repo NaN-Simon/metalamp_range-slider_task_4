@@ -10,11 +10,11 @@
 //   hasPromp: true,
 // };
 const defaultConfig = {
-  min: 1,
-  max: 10,
+  min: 10,
+  max: 300,
   valueFrom: 2,
   valueTo: 5,
-  step: 2,
+  step: 40,
   isVertical: false,
   isFloatValues: true,
   hasRuler: true,

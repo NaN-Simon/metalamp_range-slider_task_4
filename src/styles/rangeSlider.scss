@@ -20,7 +20,8 @@
   position: absolute;
   left: 0px;
   top: 36%;
-  transform: translateY(-50%);
+  // transform: translateY(-50%);
+  transform: translateX(-15px) translateY(-50%);
   cursor: pointer;
 }
 

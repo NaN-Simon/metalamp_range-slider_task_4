@@ -1,7 +1,7 @@
 import Observer from '../../Observer/Observer';
-import { IThumbPositionValue, IConfig } from './types';
+import { IThumbValue, IConfig } from './types';
 
-export default class Thumb extends Observer<IThumbPositionValue> {
+export default class Thumb extends Observer<IThumbValue> {
   protected config!: IConfig;
 
   private rangeSliderElement: HTMLElement;
@@ -40,21 +40,33 @@ export default class Thumb extends Observer<IThumbPositionValue> {
       document.addEventListener('mouseup', this.onMouseDown);
     };
   }
-  private onMouseMove(e: MouseEvent):void {
-    e.preventDefault();
-    this.thumb.ondragstart = () => false;
-    this.broadcast({ position: this.getThumbPosition(e), value: e.x, type: 'movingThumb' });
-  }
-
-  private getThumbPosition(e: MouseEvent) {
-    const rect = this.rangeSliderElement.getBoundingClientRect() as DOMRect;
-    const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
-
-    return rect;
-  }
 
   private onMouseDown() {
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseup', this.onMouseDown);
   }
+
+  private onMouseMove(e: MouseEvent):void {
+    e.preventDefault();
+    this.thumb.ondragstart = () => false;
+    this.broadcast({position: e.x, rect: this.getThumbPosition(e), dataName: this.dataName})
+  }
+
+  private getThumbPosition(e: MouseEvent) {
+    // return this.rangeSliderElement.getBoundingClientRect() as DOMRect;
+    const rect = this.rangeSliderElement.getBoundingClientRect()
+    return {
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+      x: rect.x,
+      y: rect.y
+    };
+    // return (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+  }
+
+
 }
