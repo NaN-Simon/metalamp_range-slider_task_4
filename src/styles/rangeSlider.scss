@@ -19,14 +19,20 @@
   border-radius: 50%;
   position: absolute;
   left: 0px;
-  top: 36%;
+  top: 35px;
   // transform: translateY(-50%);
   transform: translateX(-15px) translateY(-50%);
   cursor: pointer;
 }
 
 .scale{
+  position: relative;
   display: flex;
   justify-content: space-between;
   padding-top: 10px;
+  &__separator{
+    position: absolute;
+    padding-top: 3px;
+    transform: translateX(-50%);
+  }
 }

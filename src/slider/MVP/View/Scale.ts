@@ -27,31 +27,44 @@ export default class Scale {
   }
   createScale() {
     const isFloat = this.isFloat();
+    const scaleOffsetW = this.rangeSliderElement.offsetWidth
+    const gapCount = Math.ceil((this.config.max - this.config.min)/ this.config.step)
+    const pixelStep = scaleOffsetW / gapCount;
 
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
-    for (
-      let i = this.config.min;
-      i <= this.config.max - 1;
-      i += this.config.step
-    ) {
-      const scaleSeparator = document.createElement('div');
-      scaleSeparator.classList.add('scale__separator');
-      if (isFloat) {
-        scaleSeparator.innerHTML = i.toFixed(1).toString();
+
+    for(let i = 0; i < gapCount;i++){
+      const scalePosition = i * pixelStep;
+      const scaleValue = this.config.min + i * this.config.step
+      const createEl = document.createElement('div')
+
+      createEl.classList.add('scale__separator')
+      createEl.style.left = scalePosition.toString() + 'px'
+
+      if(isFloat){
+        createEl.innerHTML = scaleValue.toFixed(1).toString()
       } else {
-        scaleSeparator.innerHTML = i.toFixed(0).toString();
+        createEl.innerHTML = scaleValue.toString()
       }
-      this.scale.append(scaleSeparator);
+
+      this.scale.append(createEl);
     }
-    const scaleSeparator = document.createElement('div');
-    scaleSeparator.classList.add('scale__separator');
-    if (isFloat) {
-      scaleSeparator.innerHTML = this.config.max.toFixed(1).toString();
+    const scalePositionLastEl = gapCount * pixelStep
+    const scaleValueLastEl = this.config.max
+    const createEl = document.createElement('div')
+
+    createEl.classList.add('scale__separator')
+    createEl.style.left = scalePositionLastEl.toString() + 'px'
+
+    if(isFloat){
+      createEl.innerHTML = scaleValueLastEl.toFixed(1).toString()
     } else {
-      scaleSeparator.innerHTML = this.config.max.toFixed(0).toString();
+      createEl.innerHTML = scaleValueLastEl.toString()
     }
-    this.scale.append(scaleSeparator);
+
+    this.scale.append(createEl);
+
     this.rangeSliderElement.append(this.scale);
   }
 }
