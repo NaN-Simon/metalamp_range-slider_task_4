@@ -37,6 +37,16 @@ export interface IThumbValue {
   dataName: string;
 }
 
+export interface IRect{
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+  width: number,
+  height: number,
+  x: number,
+  y: number,
+}
 
 
 
