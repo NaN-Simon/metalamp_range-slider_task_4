@@ -5,6 +5,7 @@ import { IConfig, IViewValue, IRect } from './types';
 import ProgressBar from './ProgressBar';
 import Thumb from './Thumb';
 import Scale from './Scale';
+import Promp from './Promp';
 
 export default class View extends Observer<IViewValue> {
   protected config!: IConfig;
@@ -13,6 +14,8 @@ export default class View extends Observer<IViewValue> {
   private progressBar!: ProgressBar;
   private thumbFrom!: Thumb;
   private thumbTo!: Thumb;
+  private prompThumbFrom!: Promp;
+  private prompThumbTo!: Promp;
   private scale!: Scale;
 
   constructor(wrapperSelector: HTMLElement) {
@@ -47,9 +50,14 @@ export default class View extends Observer<IViewValue> {
 
   private initComponents() {
     this.progressBar = new ProgressBar(this.wrapperElement);
+    this.scale = new Scale(this.wrapperElement, defaultConfig);
     this.thumbFrom = new Thumb(this.wrapperElement, 'from');
     this.thumbTo = new Thumb(this.wrapperElement, 'to');
-    this.scale = new Scale(this.wrapperElement, defaultConfig);
+
+    this.prompThumbFrom = new Promp(this.thumbFrom.getThumb)
+    this.prompThumbFrom.renderPrompValue(42)
+    this.prompThumbTo = new Promp(this.thumbTo.getThumb)
+    this.prompThumbTo.renderPrompValue(42000000)
   }
 
   private renderDefaultValues(){
