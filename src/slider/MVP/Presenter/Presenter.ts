@@ -15,6 +15,8 @@ export default class Presenter {
   private subscribeView(): void {
     this.view.subscribe((data) => {
           if(data.type === 'viewChanged'){
+            console.log(data);
+            
             this.model.checkPositionValues(data.value);
           }
     });

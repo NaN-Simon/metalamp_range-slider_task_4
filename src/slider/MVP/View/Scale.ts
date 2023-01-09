@@ -12,6 +12,10 @@ export default class Scale {
     this.createScale();
   }
 
+  get getScale() {
+    return this.scale;
+  }
+
   updateConfig(value: IConfig): void {
     this.config = value;
   }
@@ -25,12 +29,15 @@ export default class Scale {
       return true;
     }
   }
+  removeScale(){
+    this.scale.remove()
+  }
   createScale() {
     const isFloat = this.isFloat();
     const scaleOffsetW = this.rangeSliderElement.offsetWidth
     const gapCount = Math.ceil((this.config.max - this.config.min)/ this.config.step)
     const pixelStep = scaleOffsetW / gapCount;
-
+    
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
 
