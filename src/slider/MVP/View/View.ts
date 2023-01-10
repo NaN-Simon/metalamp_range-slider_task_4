@@ -25,14 +25,14 @@ export default class View extends Observer<IViewValue> {
     this.initComponents();
     this.setConfig(defaultConfig)
     this.resizeEvent()
-    this.renderDefaultValues();
+    this.renderDefaultThumbPosition();
     this.subscribeThumbs();
   }
 
 
   private resizeEvent(){
     window.addEventListener('resize',()=>{
-      this.renderDefaultValues()
+      this.renderDefaultThumbPosition()
       this.scale.removeScale()
       this.scale.createScale()
     })
@@ -55,12 +55,12 @@ export default class View extends Observer<IViewValue> {
     this.thumbTo = new Thumb(this.wrapperElement, 'to');
 
     this.prompThumbFrom = new Promp(this.thumbFrom.getThumb)
-    this.prompThumbFrom.renderPrompValue(42)
+    this.prompThumbFrom.renderPrompValue(defaultConfig.valueFrom)
     this.prompThumbTo = new Promp(this.thumbTo.getThumb)
-    this.prompThumbTo.renderPrompValue(42000000)
+    this.prompThumbTo.renderPrompValue(defaultConfig.valueTo)
   }
 
-  private renderDefaultValues(){
+  private renderDefaultThumbPosition(){
     const offset = this.progressBar.getProgressBar.offsetWidth
     const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
     const pixelStep = ((offset/separatorCounts))
@@ -79,13 +79,14 @@ export default class View extends Observer<IViewValue> {
     } else {
       const reversFirstThumbTo = (Math.abs(defaultConfig.min) - defaultConfig.step)
       const reversFirstPxThumbTo = defaultConfig.valueTo*(offset - pixelStep)/reversFirstThumbTo
-      const startPositionValueThumbTo = separatorCounts - Math.abs(reversFirstPxThumbTo / pixelStep)
-      startPositionPxThumbTo = startPositionValueThumbTo*pixelStep
+      const separatorNumberThumbTo = separatorCounts - Math.abs(reversFirstPxThumbTo / pixelStep)
+      startPositionPxThumbTo = separatorNumberThumbTo*pixelStep
 
       const reversFirstThumbFrom = (Math.abs(defaultConfig.min) - defaultConfig.step)
       const reversFirstPxThumbFrom = defaultConfig.valueFrom*(offset - pixelStep)/reversFirstThumbFrom
-      const startPositionValueThumbFrom = separatorCounts - Math.abs(reversFirstPxThumbFrom / pixelStep)
-      startPositionPxThumbFrom = startPositionValueThumbFrom*pixelStep
+      const separatorNumberThumbFrom = separatorCounts - Math.abs(reversFirstPxThumbFrom / pixelStep)
+      startPositionPxThumbFrom = separatorNumberThumbFrom*pixelStep
+
     }
 
     this.thumbFrom.getThumb.style.left = startPositionPxThumbFrom +'px'
@@ -93,54 +94,64 @@ export default class View extends Observer<IViewValue> {
     this.thumbTo.getThumb.style.left = startPositionPxThumbTo +'px'
   }
 
-  //TODO переделать под DRY
-  private subscribeThumbs(){
-    console.log('запуск subscribeThumbs во View');
-    this.thumbFrom.subscribe((data) => {
-      const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
-      const pixelStep = ((data.rect.width/separatorCounts))
-      const rectX = data.rect.x
-      const rectWidth = data.rect.width
-      const thumbFromOffsetW = this.thumbFrom.getThumb.offsetWidth
+  private getValueThroughEvent(isFristRender: boolean, thumbHTML: HTMLElement, rectWidth: number, rectX: number, eventPosition: number){
+    if(isFristRender){
 
-      const shift = (Math.min(Math.max(0, data.position - rectX), rectWidth) / rectWidth) * rectWidth
+    } else {
+      const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
+      const pixelStep = ((rectWidth/separatorCounts))
+      const offset = thumbHTML.offsetWidth
+      const shift = (Math.min(Math.max(0, eventPosition - rectX), rectWidth) / rectWidth) * rectWidth;
+      let pixelValue = 0;
+      let value = 0;
 
       for(let i = 0; i <= separatorCounts; i++){
-        if(shift >= (pixelStep * i) - thumbFromOffsetW / 2) {
-          const value = i * defaultConfig.step + defaultConfig.min;
-          if(this.config.valueTo >= value){
-            this.thumbFrom.getThumb.style.left = `${i * pixelStep}px`
-            this.config.valueFrom = value;
-            this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
-          }
+        if(shift >= (pixelStep * i) - offset / 2) {
+          value = i * defaultConfig.step + defaultConfig.min;
+          pixelValue = i * pixelStep
         }
       }
+      return [pixelValue, value]
+    }
+  }
+
+  private subscribeThumbs(){
+
+    this.thumbFrom.subscribe((data) => {
+      const [pixelValue,value]: number[] = this.getValueThroughEvent(
+        false,
+        this.thumbFrom.getThumb,
+        data.rect.width,
+        data.rect.x,
+        data.eventPosition)!;
+
+        if(this.config.valueTo >= value){
+          this.thumbFrom.getThumb.style.left = `${pixelValue}px`
+          this.config.valueFrom = value;
+          this.prompThumbFrom.renderPrompValue(value)
+          this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
+        }
+
     })
 
     if(!this.thumbTo){ return }
 
     this.thumbTo.subscribe((data) => {
-      const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
-      const pixelStep = ((data.rect.width/separatorCounts))
-      const rectX = data.rect.x
-      const rectWidth = data.rect.width
-      const thumbToOffsetW = this.thumbTo.getThumb.offsetWidth
+      const [pixelValue,value]: number[] = this.getValueThroughEvent(
+        false,
+        this.thumbTo.getThumb,
+        data.rect.width,
+        data.rect.x,
+        data.eventPosition)!;
 
-      const shift = (Math.min(Math.max(0, data.position - rectX), rectWidth) / rectWidth) * rectWidth
-
-      for(let i = 0; i <= separatorCounts; i++){
-        if(shift >= (pixelStep * i) - thumbToOffsetW / 2) {
-          const value = i * defaultConfig.step + defaultConfig.min;
-          if(this.config.valueFrom <= value){
-            this.thumbTo.getThumb.style.left = `${i * pixelStep}px`
-            this.config.valueTo = value;
-            this.broadcast({value: {value: this.config, nameState: 'to'},type: 'viewChanged'})
-          }
+        if(this.config.valueFrom <= value){
+          this.thumbTo.getThumb.style.left = `${pixelValue}px`
+          this.config.valueTo = value;
+          this.prompThumbTo.renderPrompValue(value)
+          this.broadcast({value: {value: this.config, nameState: 'to'},type: 'viewChanged'})
         }
-      }
+
     })
   }
-
-
 
 }

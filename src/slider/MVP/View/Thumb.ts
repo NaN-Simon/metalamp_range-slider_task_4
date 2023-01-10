@@ -49,7 +49,7 @@ export default class Thumb extends Observer<IThumbValue> {
   private onMouseMove(e: MouseEvent):void {
     e.preventDefault();
     this.thumb.ondragstart = () => false;
-    this.broadcast({position: e.x, rect: this.getThumbPosition(e), dataName: this.dataName})
+    this.broadcast({eventPosition: e.x, rect: this.getThumbPosition(e), dataName: this.dataName})
   }
 
   private getThumbPosition(e: MouseEvent) {

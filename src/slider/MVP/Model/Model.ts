@@ -15,7 +15,7 @@ export default class Model extends Observer<ModelValues> {
   }
 
   checkPositionValues(value: IPositionValues): void {
-    console.log(value);
+    // console.log(value);
     
   }
 }

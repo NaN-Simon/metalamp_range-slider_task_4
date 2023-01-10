@@ -23,7 +23,7 @@ export interface IViewValue {
 //+
 //TODO убрать лишние
 export interface IThumbValue {
-  position: number;
+  eventPosition: number;
   rect: {
     top: number,
     right: number,
