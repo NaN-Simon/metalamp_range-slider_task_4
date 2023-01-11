@@ -23,8 +23,8 @@
 const defaultConfig = {
   min: -100,
   max: 0,
-  valueFrom: -100,
-  valueTo: -20,
+  valueFrom: -80,
+  valueTo: -10,
   step: 10,
   isVertical: false,
   isFloatValues: true,

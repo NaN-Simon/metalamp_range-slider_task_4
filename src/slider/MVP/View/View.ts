@@ -3,6 +3,7 @@ import defaultConfig from '../../defaultConfig';
 import { IConfig, IViewValue, IRect } from './types';
 
 import ProgressBar from './ProgressBar';
+import ProgressRange from './ProgressRange';
 import Thumb from './Thumb';
 import Scale from './Scale';
 import Promp from './Promp';
@@ -12,6 +13,7 @@ export default class View extends Observer<IViewValue> {
 
   private wrapperElement: HTMLElement;
   private progressBar!: ProgressBar;
+  private progressRange!: ProgressRange;
   private thumbFrom!: Thumb;
   private thumbTo!: Thumb;
   private prompThumbFrom!: Promp;
@@ -43,6 +45,7 @@ export default class View extends Observer<IViewValue> {
     this.config = value;
     this.progressBar.updateConfig(this.config);
     this.scale.updateConfig(this.config);
+    this.progressRange.updateConfig(this.config)
     this.thumbFrom.updateConfig(this.config);
     if(!this.thumbTo){ return }
     this.thumbTo.updateConfig(this.config);
@@ -54,6 +57,7 @@ export default class View extends Observer<IViewValue> {
     this.thumbFrom = new Thumb(this.wrapperElement, 'from');
     this.thumbTo = new Thumb(this.wrapperElement, 'to');
 
+    this.progressRange = new ProgressRange(this.progressBar.getProgressBar)
     this.prompThumbFrom = new Promp(this.thumbFrom.getThumb)
     this.prompThumbFrom.renderPrompValue(defaultConfig.valueFrom)
     this.prompThumbTo = new Promp(this.thumbTo.getThumb)
@@ -61,13 +65,13 @@ export default class View extends Observer<IViewValue> {
   }
 
   private renderDefaultThumbPosition(){
-    const offset = this.progressBar.getProgressBar.offsetWidth
+    const progressBarOffset = this.progressBar.getProgressBar.offsetWidth
     const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
-    const pixelStep = ((offset/separatorCounts))
+    const pixelStep = ((progressBarOffset/separatorCounts))
 
     // console.log('separatorCounts',separatorCounts)
     // console.log('pixelStep',pixelStep);
-    // console.log('offset',offset);
+    // console.log('progressBarOffset',progressBarOffset);
 
     let startPositionPxThumbFrom = 0
     let startPositionPxThumbTo = 0
@@ -78,19 +82,20 @@ export default class View extends Observer<IViewValue> {
       startPositionPxThumbTo = Math.floor(Math.abs(separatorCounts * defaultConfig.valueTo / defaultConfig.max))* pixelStep
     } else {
       const reversFirstThumbTo = (Math.abs(defaultConfig.min) - defaultConfig.step)
-      const reversFirstPxThumbTo = defaultConfig.valueTo*(offset - pixelStep)/reversFirstThumbTo
+      const reversFirstPxThumbTo = defaultConfig.valueTo*(progressBarOffset - pixelStep)/reversFirstThumbTo
       const separatorNumberThumbTo = separatorCounts - Math.abs(reversFirstPxThumbTo / pixelStep)
       startPositionPxThumbTo = separatorNumberThumbTo*pixelStep
 
       const reversFirstThumbFrom = (Math.abs(defaultConfig.min) - defaultConfig.step)
-      const reversFirstPxThumbFrom = defaultConfig.valueFrom*(offset - pixelStep)/reversFirstThumbFrom
+      const reversFirstPxThumbFrom = defaultConfig.valueFrom*(progressBarOffset - pixelStep)/reversFirstThumbFrom
       const separatorNumberThumbFrom = separatorCounts - Math.abs(reversFirstPxThumbFrom / pixelStep)
       startPositionPxThumbFrom = separatorNumberThumbFrom*pixelStep
 
     }
-
+    this.progressRange.getProgressRange.style.left = startPositionPxThumbFrom + 'px'
     this.thumbFrom.getThumb.style.left = startPositionPxThumbFrom +'px'
     if(!this.thumbTo){ return }
+    this.progressRange.getProgressRange.style.right = progressBarOffset - startPositionPxThumbTo + 'px'
     this.thumbTo.getThumb.style.left = startPositionPxThumbTo +'px'
   }
 
@@ -100,13 +105,14 @@ export default class View extends Observer<IViewValue> {
     } else {
       const separatorCounts = Math.ceil((defaultConfig.max - defaultConfig.min)/ defaultConfig.step)
       const pixelStep = ((rectWidth/separatorCounts))
-      const offset = thumbHTML.offsetWidth
+      const progressBarOffset = thumbHTML.offsetWidth
+      
       const shift = (Math.min(Math.max(0, eventPosition - rectX), rectWidth) / rectWidth) * rectWidth;
       let pixelValue = 0;
       let value = 0;
 
       for(let i = 0; i <= separatorCounts; i++){
-        if(shift >= (pixelStep * i) - offset / 2) {
+        if(shift >= (pixelStep * i) - progressBarOffset / 2) {
           value = i * defaultConfig.step + defaultConfig.min;
           pixelValue = i * pixelStep
         }
@@ -126,6 +132,7 @@ export default class View extends Observer<IViewValue> {
         data.eventPosition)!;
 
         if(this.config.valueTo >= value){
+          this.progressRange.getProgressRange.style.left = pixelValue + 'px'
           this.thumbFrom.getThumb.style.left = `${pixelValue}px`
           this.config.valueFrom = value;
           this.prompThumbFrom.renderPrompValue(value)
@@ -145,6 +152,7 @@ export default class View extends Observer<IViewValue> {
         data.eventPosition)!;
 
         if(this.config.valueFrom <= value){
+          this.progressRange.getProgressRange.style.right = this.progressBar.getProgressBar.offsetWidth - pixelValue + 'px'
           this.thumbTo.getThumb.style.left = `${pixelValue}px`
           this.config.valueTo = value;
           this.prompThumbTo.renderPrompValue(value)
