@@ -24,4 +24,8 @@ export default class ProgressBar {
     this.progressBar.classList.add('progress-bar');
     this.rangeSliderElement.prepend(this.progressBar);
   }
+
+  rotateBar(){
+    this.progressBar.classList.add('progress-bar--vertical');
+  }
 }
