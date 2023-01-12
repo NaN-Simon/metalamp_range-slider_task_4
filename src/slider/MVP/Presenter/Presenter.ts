@@ -6,8 +6,12 @@ export default class Presenter {
   view: View;
 
   constructor(model: Model, view: View) {
+
     this.model = model;
     this.view = view;
+    this.view.initStartConfig(this.model.getDefaultConfig)
+
+
     this.subscribeModel();
     this.subscribeView();
   }
@@ -15,8 +19,6 @@ export default class Presenter {
   private subscribeView(): void {
     this.view.subscribe((data) => {
           if(data.type === 'viewChanged'){
-            // console.log(data);
-
             this.model.checkPositionValues(data.value);
           }
     });
