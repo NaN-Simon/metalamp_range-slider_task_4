@@ -28,6 +28,14 @@ export default class Model extends Observer<ModelValues> {
     ? [this.config.valueFrom, this.config.valueTo] = [this.config.valueTo,this.config.valueFrom]
     : false
 
+    this.config.valueFrom < this.config.min
+    ? this.config.valueFrom = this.config.min
+    : false
+
+    this.config.valueTo > this.config.max
+    ? this.config.valueTo = this.config.max
+    : false
+
     this.config.step > (this.config.max-this.config.min)
     ? this.config.step = this.config.max-this.config.min
     : false
@@ -42,7 +50,6 @@ export default class Model extends Observer<ModelValues> {
     }
     if(arr[arr.length-1] !== this.config.max){arr.push(this.config.max)};
 
-    console.log(arr);
     if(!arr.includes(this.config.valueFrom)){
       arr.every((item, i) => {
         if (item > this.config.valueFrom) {

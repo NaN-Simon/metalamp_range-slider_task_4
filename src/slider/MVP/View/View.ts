@@ -61,8 +61,6 @@ export default class View extends Observer<IViewValue> {
   }
 
   private initComponents() {
-    console.log('initing components');
-
     this.progressBar = new ProgressBar(this.wrapperElement);
     if(this.config.isVertical){this.progressBar.rotateBar()}
     this.scale = new Scale(this.wrapperElement, this.config);
