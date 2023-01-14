@@ -4,16 +4,20 @@ import { IThumbValue, IConfig } from './types';
 export default class Thumb extends Observer<IThumbValue> {
   protected config!: IConfig;
 
-  private rangeSliderElement: HTMLElement;
+  private rangeSliderElement!: HTMLElement;
+  private progressBar!: HTMLElement;
   private thumb!: HTMLElement;
   private dataName: string;
 
   constructor(rangeSliderSelector: HTMLElement, dataName: string) {
     super();
     this.rangeSliderElement = rangeSliderSelector;
+    this.progressBar = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement
+
     this.dataName = dataName;
     this.createThumb();
 
+    this.clickHandlerBar();
     this.clickHandlerThumb();
   }
 
@@ -22,7 +26,9 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   updateConfig(value: IConfig): void {
-    this.config = value;
+    console.log('            !!!UPDATE CFG THUMB');
+
+    this.config = Object.assign({},value)
   }
 
   createThumb() {
@@ -32,6 +38,12 @@ export default class Thumb extends Observer<IThumbValue> {
     this.rangeSliderElement.append(this.thumb);
   }
 
+  private clickHandlerBar(){
+    this.progressBar.onclick = () => {
+      console.log('test bar');
+
+    }
+  }
   private clickHandlerThumb() {
     this.thumb.onmousedown = () => {
       this.onMouseMove = this.onMouseMove.bind(this);
@@ -53,7 +65,6 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   private getThumbPosition(e: MouseEvent) {
-    // return this.rangeSliderElement.getBoundingClientRect() as DOMRect;
     const rect = this.rangeSliderElement.getBoundingClientRect()
     return {
       top: rect.top,
@@ -65,8 +76,38 @@ export default class Thumb extends Observer<IThumbValue> {
       x: rect.x,
       y: rect.y
     };
-    // return (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
   }
 
+  private getOffset(HTMLElement: HTMLElement){
+    return this.config.isVertical
+    ? HTMLElement.offsetHeight
+    : HTMLElement.offsetWidth;
+  }
+
+  renderDefaultThumbPosition(progressRange: HTMLElement){
+    const progressBarOffset = this.getOffset(this.progressBar)
+    const rectWidth = this.progressBar.getBoundingClientRect().width
+    const separatorCounts = Math.ceil((this.config.max - this.config.min)/ this.config.step)
+
+    const pixelStep = ((rectWidth/separatorCounts))
+    const arr: number[] = []
+
+    for(let i = 0; i < separatorCounts; i++){
+      const value = Number((this.config.min + this.config.step * i).toFixed(1))
+      arr.push(value)
+    }
+
+    if(arr[arr.length-1] !== this.config.max){arr.push(this.config.max)};
+
+    if(this.dataName === 'from'){
+      const startPositionPxThumbFrom = ((arr.indexOf(this.config.valueFrom))*pixelStep);
+      progressRange.style.left = startPositionPxThumbFrom + 'px'
+      this.thumb.style.left = startPositionPxThumbFrom +'px'
+    } else {
+      const startPositionPxThumbTo = ((arr.indexOf(this.config.valueTo))*pixelStep);
+      progressRange.style.right = progressBarOffset - startPositionPxThumbTo + 'px'
+      this.thumb.style.left = startPositionPxThumbTo +'px'
+    }
+  }
 
 }

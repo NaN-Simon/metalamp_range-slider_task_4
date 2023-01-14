@@ -9,7 +9,7 @@ export default class Presenter {
 
     this.model = model;
     this.view = view;
-    this.view.initStartConfig(this.model.getDefaultConfig)
+    this.view.init(this.model.getDefaultConfig)
 
 
     this.subscribeModel();

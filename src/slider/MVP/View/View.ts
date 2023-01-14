@@ -26,19 +26,19 @@ export default class View extends Observer<IViewValue> {
     this.wrapperElement.classList.add('range-slider-wrapper')
   }
 
-  initStartConfig(cfgValue: IConfig){
-    this.config = cfgValue
+  init(value: IConfig){
+    this.config = Object.assign({},value)
     this.initComponents();
-    this.setConfig(cfgValue)
-    this.resizeEvent()
-    this.renderDefaultThumbPosition();
+    this.setConfig(this.config)
+    this.setStartValues()
+    this.resizeEvent();
     this.subscribeThumbs();
 
   }
 
   private resizeEvent(){
     window.addEventListener('resize',()=>{
-      this.renderDefaultThumbPosition()
+      this.setStartValues()
       this.scale.removeScale()
       this.scale.createScale()
     })
@@ -51,56 +51,33 @@ export default class View extends Observer<IViewValue> {
   }
 
   setConfig(value: IConfig): void {
-    console.log('запуск updateConfig во View');
+    console.log('            !!!IMPORT CFG COMPONENTS');
     this.progressBar.updateConfig(this.config);
     this.scale.updateConfig(this.config);
-    this.progressRange.updateConfig(this.config)
+    this.progressRange.updateConfig(this.config);
     this.thumbFrom.updateConfig(this.config);
-    if(!this.thumbTo){ return }
     this.thumbTo.updateConfig(this.config);
+
   }
 
   private initComponents() {
+    console.log('            !!!INIT COMPONENTS');
     this.progressBar = new ProgressBar(this.wrapperElement);
-    if(this.config.isVertical){this.progressBar.rotateBar()}
+    this.progressRange = new ProgressRange(this.progressBar.getProgressBar)
     this.scale = new Scale(this.wrapperElement, this.config);
     this.thumbFrom = new Thumb(this.wrapperElement, 'from');
     this.thumbTo = new Thumb(this.wrapperElement, 'to');
-
-    this.progressRange = new ProgressRange(this.progressBar.getProgressBar)
-
     this.prompThumbFrom = new Promp(this.thumbFrom.getThumb)
-    this.prompThumbFrom.renderPrompValue(this.config.valueFrom)
     this.prompThumbTo = new Promp(this.thumbTo.getThumb)
-    this.prompThumbTo.renderPrompValue(this.config.valueTo)
-
   }
 
-  private renderDefaultThumbPosition(){
-    const progressBarOffset = this.getOffset(this.wrapperElement)
-    const rectWidth = this.wrapperElement.getBoundingClientRect().width
-    const separatorCounts = Math.ceil((this.config.max - this.config.min)/ this.config.step)
+  private setStartValues(){
+    console.log('            !!!INIT START VALUES');
+    this.thumbFrom.renderDefaultThumbPosition(this.progressRange.getProgressRange)
+    this.thumbTo.renderDefaultThumbPosition(this.progressRange.getProgressRange)
+    this.prompThumbFrom.renderPrompValue(this.config.valueFrom)
+    this.prompThumbTo.renderPrompValue(this.config.valueTo)
 
-    const pixelStep = ((rectWidth/separatorCounts))
-    const arr: number[] = []
-
-    for(let i = 0; i < separatorCounts; i++){
-      const value = Number((this.config.min + this.config.step * i).toFixed(1))
-      arr.push(value)
-    }
-
-    if(arr[arr.length-1] !== this.config.max){arr.push(this.config.max)};
-
-    const startPositionPxThumbFrom = ((arr.indexOf(this.config.valueFrom))*pixelStep);
-    this.progressRange.getProgressRange.style.left = startPositionPxThumbFrom + 'px'
-    this.thumbFrom.getThumb.style.left = startPositionPxThumbFrom +'px'
-
-
-    if(!this.thumbTo){ return }
-
-    const startPositionPxThumbTo = ((arr.indexOf(this.config.valueTo))*pixelStep);
-    this.progressRange.getProgressRange.style.right = progressBarOffset - startPositionPxThumbTo + 'px'
-    this.thumbTo.getThumb.style.left = startPositionPxThumbTo +'px'
   }
 
   private getValueThroughEvent(isFristRender: boolean, thumbHTML: HTMLElement, rectWidth: number, rectX: number, eventPosition: number){
@@ -145,7 +122,6 @@ export default class View extends Observer<IViewValue> {
           this.config.valueFrom = value;
           this.prompThumbFrom.renderPrompValue(value)
           this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
-          // console.log(this.config);
         }
 
     })
@@ -166,7 +142,6 @@ export default class View extends Observer<IViewValue> {
           this.config.valueTo = value;
           this.prompThumbTo.renderPrompValue(value)
           this.broadcast({value: {value: this.config, nameState: 'to'},type: 'viewChanged'})
-          // console.log(this.config);
         }
 
     })
