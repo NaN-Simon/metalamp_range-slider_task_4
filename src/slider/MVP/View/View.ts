@@ -80,41 +80,10 @@ export default class View extends Observer<IViewValue> {
 
   }
 
-  private getValueThroughEvent(isFristRender: boolean, thumbHTML: HTMLElement, rectWidth: number, rectX: number, eventPosition: number){
-    if(isFristRender){
-
-    } else {
-      const separatorCounts = Math.ceil((this.config.max - this.config.min)/ this.config.step)
-      const pixelStep = ((rectWidth/separatorCounts))
-      const progressBarOffset = this.getOffset(thumbHTML)
-
-
-      const shift = (Math.min(Math.max(0, eventPosition - rectX), rectWidth) / rectWidth) * rectWidth;
-
-      let pixelValue = 0;
-      let value = 0; console.log();
-
-
-      for(let i = 0; i <= separatorCounts; i++){
-        if(shift >= (pixelStep * i) - progressBarOffset / 2) {
-          value = Number((i * this.config.step + this.config.min).toFixed(1))
-          if(value > this.config.max){value = this.config.max}
-          pixelValue = i * pixelStep
-        }
-      }
-      return [pixelValue, value]
-    }
-  }
-
   private subscribeThumbs(){
 
     this.thumbFrom.subscribe((data) => {
-      const [pixelValue,value]: number[] = this.getValueThroughEvent(
-        false,
-        this.thumbFrom.getThumb,
-        data.rect.width,
-        data.rect.x,
-        data.eventPosition)!;
+      const [pixelValue,value]: number[] = data.pxValueAndValue
 
         if(this.config.valueTo >= value){
           this.progressRange.getProgressRange.style.left = `${pixelValue}px`
@@ -130,12 +99,7 @@ export default class View extends Observer<IViewValue> {
       if(!this.thumbTo){ return }
 
       this.thumbTo.subscribe((data) => {
-        const [pixelValue,value]: number[] = this.getValueThroughEvent(
-          false,
-        this.thumbTo.getThumb,
-        data.rect.width,
-        data.rect.x,
-        data.eventPosition)!;
+        const [pixelValue,value]: number[] = data.pxValueAndValue
 
         if(this.config.valueFrom <= value){
           this.progressRange.getProgressRange.style.right = `${this.progressBar.getProgressBar.offsetWidth - pixelValue}px`

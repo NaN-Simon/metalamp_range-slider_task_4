@@ -24,6 +24,11 @@ export default class Thumb extends Observer<IThumbValue> {
   get getThumb() {
     return this.thumb;
   }
+  get getThumbSize(){
+    return this.config.isVertical
+    ? this.thumb.getBoundingClientRect().height
+    : this.thumb.getBoundingClientRect().width
+  }
   get getWrapperSize(){
     return this.config.isVertical
     ? this.progressBar.getBoundingClientRect().height
@@ -61,7 +66,6 @@ export default class Thumb extends Observer<IThumbValue> {
     this.rangeSliderElement.append(this.thumb);
   }
 
-
   private clickHandlerThumb() {
     this.thumb.onmousedown = () => {
       this.onMouseMove = this.onMouseMove.bind(this);
@@ -79,10 +83,29 @@ export default class Thumb extends Observer<IThumbValue> {
   private onMouseMove(e: MouseEvent):void {
     e.preventDefault();
     this.thumb.ondragstart = () => false;
-    this.broadcast({eventPosition: e.x, rect: this.getThumbPosition(e), dataName: this.dataName})
+    this.getPxValueAndValue(e);
+
+    this.broadcast({pxValueAndValue: this.getPxValueAndValue(e), dataName: this.dataName})
   }
 
-  private getThumbPosition(e: MouseEvent) {
+  private getPxValueAndValue(e: MouseEvent): number[] {
+    const rect = this.getRangeSliderRect
+    const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+    let pixelValue = 0;
+    let value = 0;
+
+    for(let i = 0; i <= this.getSeparatorCounts; i++){
+      if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
+        value = Number((i * this.config.step + this.config.min).toFixed(1))
+        if(value > this.config.max){value = this.config.max}
+        pixelValue = i * this.getPixelStep
+      }
+    }
+
+    return [pixelValue, value]
+  }
+
+  get getRangeSliderRect() {
     const rect = this.rangeSliderElement.getBoundingClientRect()
     return {
       top: rect.top,
