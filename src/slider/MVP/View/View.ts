@@ -73,8 +73,8 @@ export default class View extends Observer<IViewValue> {
 
   private setStartValues(){
     console.log('            !!!INIT START VALUES');
-    this.thumbFrom.renderDefaultThumbPosition(this.progressRange.getProgressRange)
-    this.thumbTo.renderDefaultThumbPosition(this.progressRange.getProgressRange)
+    this.thumbFrom.renderDefaultThumbPosition()
+    this.thumbTo.renderDefaultThumbPosition()
     this.prompThumbFrom.renderPrompValue(this.config.valueFrom)
     this.prompThumbTo.renderPrompValue(this.config.valueTo)
 
@@ -118,19 +118,20 @@ export default class View extends Observer<IViewValue> {
 
         if(this.config.valueTo >= value){
           this.progressRange.getProgressRange.style.left = `${pixelValue}px`
+
           this.thumbFrom.getThumb.style.left = `${pixelValue}px`
           this.config.valueFrom = value;
           this.prompThumbFrom.renderPrompValue(value)
           this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
         }
 
-    })
+      })
 
-    if(!this.thumbTo){ return }
+      if(!this.thumbTo){ return }
 
-    this.thumbTo.subscribe((data) => {
-      const [pixelValue,value]: number[] = this.getValueThroughEvent(
-        false,
+      this.thumbTo.subscribe((data) => {
+        const [pixelValue,value]: number[] = this.getValueThroughEvent(
+          false,
         this.thumbTo.getThumb,
         data.rect.width,
         data.rect.x,

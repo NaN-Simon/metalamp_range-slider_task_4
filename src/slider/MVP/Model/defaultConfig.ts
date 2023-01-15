@@ -12,8 +12,8 @@
 const defaultConfig = {
   min: 0,
   max: 100,
-  valueFrom: 10,
-  valueTo: 90,
+  valueFrom: 30,
+  valueTo: 40,
   step: 10,
   isVertical: false,
   isFloatValues: true,
