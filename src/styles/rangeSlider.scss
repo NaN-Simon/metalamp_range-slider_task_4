@@ -47,6 +47,7 @@ $thumbSizeHalf: calc($thumbSize / 2);
   display: flex;
   justify-content: space-between;
   padding-top: 10px;
+  user-select: none;
 
   &__separator{
     position: absolute;

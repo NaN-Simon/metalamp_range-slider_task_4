@@ -50,7 +50,7 @@ export default class Scale {
       createEl.style.left = scalePosition.toString() + 'px'
 
       if(isFloat){
-        createEl.innerHTML = scaleValue.toFixed(1).toString()
+        createEl.innerHTML = scaleValue.toFixed(2).toString()
       } else {
         createEl.innerHTML = scaleValue.toString()
       }
@@ -65,7 +65,7 @@ export default class Scale {
     createEl.style.left = scalePositionLastEl.toString() + 'px'
 
     if(isFloat){
-      createEl.innerHTML = scaleValueLastEl.toFixed(1).toString()
+      createEl.innerHTML = scaleValueLastEl.toFixed(2).toString()
     } else {
       createEl.innerHTML = scaleValueLastEl.toString()
     }

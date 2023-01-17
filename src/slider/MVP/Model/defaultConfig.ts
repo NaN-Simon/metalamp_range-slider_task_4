@@ -1,3 +1,14 @@
+const defaultConfig = {
+  min: 0,
+  max: 100,
+  valueFrom: 50,
+  valueTo: 50,
+  step: 10,
+  isVertical: false,
+  isFloatValues: false,
+  hasRuler: true,
+  hasPromp: true,
+};
 // const defaultConfig = {
 //   min: -1.9,
 //   max: 5.2,
@@ -9,23 +20,12 @@
 //   hasRuler: true,
 //   hasPromp: true,
 // };
-const defaultConfig = {
-  min: 0,
-  max: 100,
-  valueFrom: 30,
-  valueTo: 40,
-  step: 10,
-  isVertical: false,
-  isFloatValues: true,
-  hasRuler: true,
-  hasPromp: true,
-};
 // const defaultConfig = {
-//   min: -100.2,
+//   min: -100.26,
 //   max: 10.2,
 //   valueFrom: -85.2,
 //   valueTo: -0.2,
-//   step: 5555.4,
+//   step: 23.43,
 //   isVertical: false,
 //   isFloatValues: true,
 //   hasRuler: true,

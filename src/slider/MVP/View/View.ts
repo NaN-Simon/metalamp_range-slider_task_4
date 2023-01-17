@@ -84,13 +84,16 @@ export default class View extends Observer<IViewValue> {
 
     this.thumbFrom.subscribe((data) => {
       const [pixelValue,value]: number[] = data.pxValueAndValue
+      // console.log('triger LEFT');
+      
 
-        if(this.config.valueTo >= value){
+        if(data.dataName === 'from' && this.config.valueTo >= value){
           this.progressRange.getProgressRange.style.left = `${pixelValue}px`
-
+          
           this.thumbFrom.getThumb.style.left = `${pixelValue}px`
           this.config.valueFrom = value;
           this.prompThumbFrom.renderPrompValue(value)
+          this.setConfig(this.config)
           this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
         }
 
@@ -100,12 +103,14 @@ export default class View extends Observer<IViewValue> {
 
       this.thumbTo.subscribe((data) => {
         const [pixelValue,value]: number[] = data.pxValueAndValue
+        // console.log('triger RIGHT');
 
-        if(this.config.valueFrom <= value){
+        if(data.dataName === 'to' && this.config.valueFrom <= value){
           this.progressRange.getProgressRange.style.right = `${this.progressBar.getProgressBar.offsetWidth - pixelValue}px`
           this.thumbTo.getThumb.style.left = `${pixelValue}px`
           this.config.valueTo = value;
           this.prompThumbTo.renderPrompValue(value)
+          this.setConfig(this.config)
           this.broadcast({value: {value: this.config, nameState: 'to'},type: 'viewChanged'})
         }
 

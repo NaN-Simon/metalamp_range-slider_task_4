@@ -45,7 +45,7 @@ export default class Model extends Observer<ModelValues> {
     const arr: number[] = []
 
     for(let i = 0; i < separatorCounts; i++){
-      const value = Number((this.config.min + this.config.step * i).toFixed(1))
+      const value = Number((this.config.min + this.config.step * i).toFixed(2))
       arr.push(value)
     }
     if(arr[arr.length-1] !== this.config.max){arr.push(this.config.max)};
