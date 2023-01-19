@@ -1,5 +1,5 @@
 import Observer from '../../Observer/Observer';
-import { IConfig, IViewValue, IRect } from './types';
+import { IConfig, IViewValue } from './types';
 
 import ProgressBar from './ProgressBar';
 import ProgressRange from './ProgressRange';
@@ -11,11 +11,10 @@ export default class View extends Observer<IViewValue> {
   protected config!: IConfig;
 
   private wrapperElement: HTMLElement;
-  private startConfig!: IConfig;
   private progressBar!: ProgressBar;
   private progressRange!: ProgressRange;
   private thumbFrom!: Thumb;
-  private thumbTo!: Thumb;
+  private thumbTo: Thumb | undefined;
   private prompThumbFrom!: Promp;
   private prompThumbTo!: Promp;
   private scale!: Scale;
@@ -24,6 +23,14 @@ export default class View extends Observer<IViewValue> {
     super();
     this.wrapperElement = wrapperSelector;
     this.wrapperElement.classList.add('range-slider-wrapper')
+
+
+  }
+
+  get getWrapperSize(){
+    return this.config.isVertical
+    ? this.progressBar.getProgressBar.getBoundingClientRect().height
+    : this.progressBar.getProgressBar.getBoundingClientRect().width
   }
 
   init(value: IConfig){
@@ -56,7 +63,7 @@ export default class View extends Observer<IViewValue> {
     this.scale.updateConfig(this.config);
     this.progressRange.updateConfig(this.config);
     this.thumbFrom.updateConfig(this.config);
-    this.thumbTo.updateConfig(this.config);
+    this.thumbTo ? this.thumbTo.updateConfig(this.config) : false
 
   }
 
@@ -66,36 +73,62 @@ export default class View extends Observer<IViewValue> {
     this.progressRange = new ProgressRange(this.progressBar.getProgressBar)
     this.scale = new Scale(this.wrapperElement, this.config);
     this.thumbFrom = new Thumb(this.wrapperElement, 'from');
-    this.thumbTo = new Thumb(this.wrapperElement, 'to');
+    this.config.valueTo ? this.thumbTo = new Thumb(this.wrapperElement, 'to') : false
     this.prompThumbFrom = new Promp(this.thumbFrom.getThumb)
-    this.prompThumbTo = new Promp(this.thumbTo.getThumb)
+    this.thumbTo ? this.prompThumbTo = new Promp(this.thumbTo.getThumb) : false
   }
 
   private setStartValues(){
     console.log('            !!!INIT START VALUES');
     this.thumbFrom.renderDefaultThumbPosition()
-    this.thumbTo.renderDefaultThumbPosition()
+    this.thumbTo ? this.thumbTo.renderDefaultThumbPosition() : false
     this.prompThumbFrom.renderPrompValue(this.config.valueFrom)
-    this.prompThumbTo.renderPrompValue(this.config.valueTo)
+    this.config.valueTo ? this.prompThumbTo.renderPrompValue(this.config.valueTo) : false
 
+    const from = this.thumbFrom.getStartPosition('from') as number
+
+    if(this.thumbTo){
+      this.progressRange.renderDefaultProgressRange('start',from)
+    } else {
+      this.progressRange.renderDefaultProgressRange('end',from)
+    }
+
+    if(this.thumbTo){
+      const to = this.thumbTo.getStartPosition('to')!
+      this.progressRange.renderDefaultProgressRange('end',to)
+    }
+  }
+
+  private isTouchEachOther(thumb: string,value: number){
+    let result = false
+    if(thumb === 'from' && this.config.valueTo){
+      result = this.config.valueTo >= value
+    } else if(thumb === 'from'){
+      result = true
+    } else {
+      result = this.config.valueFrom <= value
+    }
+    return result
   }
 
   private subscribeThumbs(){
 
     this.thumbFrom.subscribe((data) => {
       const [pixelValue,value]: number[] = data.pxValueAndValue
-      // console.log('triger LEFT');
-      
 
-        if(data.dataName === 'from' && this.config.valueTo >= value){
-          this.progressRange.getProgressRange.style.left = `${pixelValue}px`
-          
-          this.thumbFrom.getThumb.style.left = `${pixelValue}px`
-          this.config.valueFrom = value;
-          this.prompThumbFrom.renderPrompValue(value)
-          this.setConfig(this.config)
-          this.broadcast({value: {value: this.config, nameState: 'from'},type: 'viewChanged'})
+      if(data.dataName === 'from' && this.isTouchEachOther('from', value)){
+        if(this.thumbTo){
+          this.progressRange.renderProgressRange(data.dataName, pixelValue)
+        } else {
+          this.progressRange.renderProgressRange('to', pixelValue)
         }
+
+        this.thumbFrom.renderThumb(pixelValue)
+        this.config.valueFrom = value;
+        this.prompThumbFrom.renderPrompValue(value)
+        this.setConfig(this.config)
+        this.broadcast({value: {value: this.config, nameState: data.dataName}, type: 'viewChanged'})
+      }
 
       })
 
@@ -103,15 +136,14 @@ export default class View extends Observer<IViewValue> {
 
       this.thumbTo.subscribe((data) => {
         const [pixelValue,value]: number[] = data.pxValueAndValue
-        // console.log('triger RIGHT');
 
-        if(data.dataName === 'to' && this.config.valueFrom <= value){
-          this.progressRange.getProgressRange.style.right = `${this.progressBar.getProgressBar.offsetWidth - pixelValue}px`
-          this.thumbTo.getThumb.style.left = `${pixelValue}px`
+        if(data.dataName === 'to' && this.isTouchEachOther('to', value)){
+          this.progressRange.renderProgressRange(data.dataName, pixelValue)
+          this.thumbTo ? this.thumbTo.renderThumb(pixelValue) : false
           this.config.valueTo = value;
           this.prompThumbTo.renderPrompValue(value)
           this.setConfig(this.config)
-          this.broadcast({value: {value: this.config, nameState: 'to'},type: 'viewChanged'})
+          this.broadcast({value: {value: this.config, nameState: data.dataName}, type: 'viewChanged'})
         }
 
     })

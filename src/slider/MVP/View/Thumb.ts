@@ -19,14 +19,14 @@ export default class Thumb extends Observer<IThumbValue> {
     this.dataName = dataName;
     this.createThumb();
 
-    this.clickHandlerBar();
+    // this.clickHandlerBar();
     this.clickHandlerThumb();
   }
 
   get getThumb() {
     return this.thumb;
   }
-  
+
   get getThumbSize(){
     return this.config.isVertical
     ? this.thumb.getBoundingClientRect().height
@@ -96,14 +96,15 @@ export default class Thumb extends Observer<IThumbValue> {
     const closestPxValue = this.getPxValueAndValue(e)[0]
     const closestValue = this.getPxValueAndValue(e)[1]
     const compareWithFrom = (Math.abs(this.config.valueFrom - closestValue));
-    const compareWithTo = (Math.abs(this.config.valueTo - closestValue));
 
-    let closestThumb = compareWithFrom < compareWithTo ? 'from' : 'to'
+    if(this.config.valueTo){
+      const compareWithTo = (Math.abs(this.config.valueTo - closestValue));
+      let closestThumb = compareWithFrom < compareWithTo ? 'from' : 'to'
 
     if(this.config.valueFrom === this.config.valueTo && closestValue < this.config.valueFrom){
       closestThumb = 'from'
-
     }
+
     if(this.config.max === this.config.valueFrom){
       closestThumb = 'from'
     }
@@ -113,6 +114,7 @@ export default class Thumb extends Observer<IThumbValue> {
     } else {
       this.broadcast({pxValueAndValue: [closestPxValue, closestValue], dataName: 'to'})
     }
+  }
 
   }
 
@@ -155,25 +157,25 @@ export default class Thumb extends Observer<IThumbValue> {
     return [pixelValue, value]
   }
 
-  renderDefaultThumbPosition(){
+  getStartPosition(thumb: string){
     const valuesArray = this.getValuesArray
-
-    const startPositionPxThumbFrom = ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep);
-    const startPositionPxThumbTo = ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep);
-    if(this.dataName === 'from'){
-      this.thumb.style.left = startPositionPxThumbFrom +'px'
-    } else {
-      this.thumb.style.left = startPositionPxThumbTo +'px'
-    }
-    this.renderProgressRange(startPositionPxThumbFrom, startPositionPxThumbTo)
-  }
-
-  renderProgressRange(PxValueFrom: number, PxValueTo: number){
-    if(this.dataName === 'from'){
-      this.progressRange.style.left = PxValueFrom + 'px'
-    } else {
-      this.progressRange.style.right = this.getWrapperSize - PxValueTo + 'px'
+    if(thumb === 'from'){
+      return ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
+    } else if (this.config.valueTo){
+      return ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep)
     }
   }
 
+  renderDefaultThumbPosition(){
+
+    if(this.dataName === 'from'){
+      this.thumb.style.left = this.getStartPosition('from') +'px'
+    } else {
+      this.thumb.style.left = this.getStartPosition('to') +'px'
+    }
+  }
+
+  renderThumb(pxValue: number): void{
+    this.thumb.style.left = `${pxValue}px`
+  }
 }
