@@ -1,11 +1,11 @@
 const defaultConfig = {
-  min: 0,
+  min: 11.11,
   max: 100,
-  valueFrom: 10,
-  valueTo: undefined,
+  valueFrom: 11.11,
+  valueTo: 80,
   step: 10,
   isVertical: false,
-  isFloatValues: false,
+  isFloatValues: true,
   hasRuler: true,
   hasPromp: true,
 };

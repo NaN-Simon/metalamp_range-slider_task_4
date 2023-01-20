@@ -58,7 +58,7 @@ export default class View extends Observer<IViewValue> {
   }
 
   setConfig(value: IConfig): void {
-    console.log('            !!!IMPORT CFG COMPONENTS');
+    // console.log('            !!!IMPORT CFG COMPONENTS');
     this.progressBar.updateConfig(this.config);
     this.scale.updateConfig(this.config);
     this.progressRange.updateConfig(this.config);
@@ -68,7 +68,7 @@ export default class View extends Observer<IViewValue> {
   }
 
   private initComponents() {
-    console.log('            !!!INIT COMPONENTS');
+    // console.log('            !!!INIT COMPONENTS');
     this.progressBar = new ProgressBar(this.wrapperElement);
     this.progressRange = new ProgressRange(this.progressBar.getProgressBar)
     this.scale = new Scale(this.wrapperElement, this.config);
@@ -79,9 +79,10 @@ export default class View extends Observer<IViewValue> {
   }
 
   private setStartValues(){
-    console.log('            !!!INIT START VALUES');
+    // console.log('            !!!INIT START VALUES');
     this.thumbFrom.renderDefaultThumbPosition()
     this.thumbTo ? this.thumbTo.renderDefaultThumbPosition() : false
+    
     this.prompThumbFrom.renderPrompValue(this.config.valueFrom)
     this.config.valueTo ? this.prompThumbTo.renderPrompValue(this.config.valueTo) : false
 

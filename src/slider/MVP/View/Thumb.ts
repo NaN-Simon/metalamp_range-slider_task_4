@@ -19,7 +19,7 @@ export default class Thumb extends Observer<IThumbValue> {
     this.dataName = dataName;
     this.createThumb();
 
-    // this.clickHandlerBar();
+    this.clickHandlerBar();
     this.clickHandlerThumb();
   }
 
@@ -74,17 +74,59 @@ export default class Thumb extends Observer<IThumbValue> {
     };
   }
 
-  updateConfig(value: IConfig): void {
-    console.log('            !!!UPDATE CFG THUMB');
+  private getPxValueAndValue(e: MouseEvent): number[] {
+    const rect = this.getRangeSliderRect
+    const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+    let pixelValue = 0;
+    let value = 0;
 
+    for(let i = 0; i <= this.getSeparatorCounts; i++){
+      if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
+        value = Number((i * this.config.step + this.config.min).toFixed(2))
+        if(value > this.config.max){value = this.config.max}
+        pixelValue = i * this.getPixelStep
+      }
+    }
+
+    return [pixelValue, value]
+  }
+
+  getStartPosition(thumb: string){
+    const valuesArray = this.getValuesArray
+
+    if(thumb === 'from'){
+      return ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
+    } else if (this.config.valueTo){
+      return ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep)
+    }
+  }
+
+  updateConfig(value: IConfig): void {
+    // console.log('            !!!UPDATE CFG THUMB');
     this.config = Object.assign({},value)
   }
 
-  createThumb() {
+  private createThumb() {
     this.thumb = document.createElement('div');
     this.thumb.classList.add('thumb');
     this.thumb.setAttribute('data-name', this.dataName);
     this.rangeSliderElement.append(this.thumb);
+  }
+
+  private comparePositionOnClick(closestValue:number){
+    const compareWithFrom = (Math.abs(this.config.valueFrom - closestValue));
+    const compareWithTo = this.config.valueTo ? (Math.abs(this.config.valueTo - closestValue)) : false
+
+    let closestThumb = this.config.valueTo && compareWithFrom >= compareWithTo ? 'to' : 'from'
+    
+    if(this.config.valueFrom === this.config.valueTo && closestValue < this.config.valueFrom){
+      closestThumb = 'from'
+    }
+    if(this.config.max === this.config.valueFrom){
+      closestThumb = 'from'
+    }
+
+    return closestThumb
   }
 
   private clickHandlerBar(){
@@ -92,30 +134,15 @@ export default class Thumb extends Observer<IThumbValue> {
     this.progressBar.addEventListener('mousedown', this.onMouseClick)
   }
 
-  onMouseClick(e: MouseEvent){
-    const closestPxValue = this.getPxValueAndValue(e)[0]
-    const closestValue = this.getPxValueAndValue(e)[1]
-    const compareWithFrom = (Math.abs(this.config.valueFrom - closestValue));
+  private onMouseClick(e: MouseEvent){
+    const [closestPxValue,closestValue] = this.getPxValueAndValue(e)
+    const closestThumb = this.comparePositionOnClick(closestValue)
 
-    if(this.config.valueTo){
-      const compareWithTo = (Math.abs(this.config.valueTo - closestValue));
-      let closestThumb = compareWithFrom < compareWithTo ? 'from' : 'to'
-
-    if(this.config.valueFrom === this.config.valueTo && closestValue < this.config.valueFrom){
-      closestThumb = 'from'
-    }
-
-    if(this.config.max === this.config.valueFrom){
-      closestThumb = 'from'
-    }
-
-    if(closestThumb === 'from'){
-      this.broadcast({pxValueAndValue: [closestPxValue, closestValue], dataName: 'from'})
-    } else {
-      this.broadcast({pxValueAndValue: [closestPxValue, closestValue], dataName: 'to'})
-    }
-  }
-
+      if(closestThumb === 'from'){
+        this.broadcast({pxValueAndValue: [closestPxValue, closestValue], dataName: 'from'})
+      } else {
+        this.broadcast({pxValueAndValue: [closestPxValue, closestValue], dataName: 'to'})
+      }
   }
 
   private clickHandlerThumb() {
@@ -138,32 +165,6 @@ export default class Thumb extends Observer<IThumbValue> {
     this.getPxValueAndValue(e);
 
     this.broadcast({pxValueAndValue: this.getPxValueAndValue(e), dataName: this.dataName})
-  }
-
-  private getPxValueAndValue(e: MouseEvent): number[] {
-    const rect = this.getRangeSliderRect
-    const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
-    let pixelValue = 0;
-    let value = 0;
-
-    for(let i = 0; i <= this.getSeparatorCounts; i++){
-      if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
-        value = Number((i * this.config.step + this.config.min).toFixed(2))
-        if(value > this.config.max){value = this.config.max}
-        pixelValue = i * this.getPixelStep
-      }
-    }
-
-    return [pixelValue, value]
-  }
-
-  getStartPosition(thumb: string){
-    const valuesArray = this.getValuesArray
-    if(thumb === 'from'){
-      return ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
-    } else if (this.config.valueTo){
-      return ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep)
-    }
   }
 
   renderDefaultThumbPosition(){
