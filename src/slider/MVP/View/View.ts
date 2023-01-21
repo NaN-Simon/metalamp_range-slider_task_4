@@ -59,12 +59,16 @@ export default class View extends Observer<IViewValue> {
   setConfig(value: IConfig): void {
     /* console.log('            !!!IMPORT CFG COMPONENTS') */
     this.progressBar.updateConfig(this.config);
-    this.scale.updateConfig(this.config);
     this.progressRange.updateConfig(this.config);
     this.thumbFrom.updateConfig(this.config);
     this.thumbTo ? this.thumbTo.updateConfig(this.config) : false
-    this.prompThumbFrom.updateConfig(this.config)
-    this.thumbTo ? this.prompThumbTo.updateConfig(this.config) : false
+    if(this.config.hasScale){
+      this.scale.updateConfig(this.config);
+    }
+    if(this.config.hasPromp){
+      this.prompThumbFrom.updateConfig(this.config)
+      this.thumbTo ? this.prompThumbTo.updateConfig(this.config) : false
+    }
   }
 
   private initComponents() {
@@ -73,14 +77,18 @@ export default class View extends Observer<IViewValue> {
     this.progressBar = new ProgressBar(this.wrapperElement);
     /* init ProgressRange */
     this.progressRange = new ProgressRange()
-    /* init Scale */
-    this.scale = new Scale();
     /* init Thumb */
     this.thumbFrom = new Thumb();
     this.config.valueTo ? this.thumbTo = new Thumb() : false
+    /* init Scale */
+    if(this.config.hasScale){
+      this.scale = new Scale();
+    }
     /* init Promp */
-    this.prompThumbFrom = new Promp()
-    this.thumbTo ? this.prompThumbTo = new Promp() : false
+    if(this.config.hasPromp){
+      this.prompThumbFrom = new Promp()
+      this.thumbTo ? this.prompThumbTo = new Promp() : false
+    }
   }
 
   private setStartValues(){
@@ -88,13 +96,17 @@ export default class View extends Observer<IViewValue> {
     /* Thumb creating */this.thumbFrom.createThumb(this.wrapperElement, 'from')
     /* Thumb creating */this.config.valueTo ? this.thumbTo?.createThumb(this.wrapperElement, 'to') : false
     /* ProgressRange creatnig */this.progressRange.createRange(this.progressBar.getProgressBar)
-    /* Scale creating */this.scale.createScale(this.wrapperElement)
     /* Thumb renderDefault */ this.thumbFrom.renderDefaultThumbPosition()
     /* Thumb renderDefault */ this.thumbTo ? this.thumbTo.renderDefaultThumbPosition() : false
-    /* Promp creating */ this.prompThumbFrom.createPromp(this.thumbFrom.getThumb)
-    /* Promp creating */ this.thumbTo ? this.prompThumbTo.createPromp(this.thumbTo.getThumb) : false
-    /* Promp renderDefault */ this.prompThumbFrom.renderPrompValue('from')
-    /* Promp renderDefault */ this.config.valueTo ? this.prompThumbTo.renderPrompValue('to') : false
+    if(this.config.hasScale){
+      /* Scale creating */this.scale.createScale(this.wrapperElement)
+    }
+    if(this.config.hasPromp){
+      /* Promp creating */ this.prompThumbFrom.createPromp(this.thumbFrom.getThumb)
+      /* Promp creating */ this.thumbTo ? this.prompThumbTo.createPromp(this.thumbTo.getThumb) : false
+      /* Promp renderDefault */ this.prompThumbFrom.renderPrompValue('from')
+      /* Promp renderDefault */ this.config.valueTo ? this.prompThumbTo.renderPrompValue('to') : false
+    }
 
     const from = this.thumbFrom.getStartPosition('from') as number
     const to = this.thumbTo ? this.thumbTo.getStartPosition('to') as number : undefined
@@ -135,7 +147,7 @@ export default class View extends Observer<IViewValue> {
         this.thumbFrom.renderThumb(pixelValue)
         this.config.valueFrom = value;
         this.setConfig(this.config)
-        this.prompThumbFrom.renderPrompValue(data.dataName)
+        this.config.hasPromp ? this.prompThumbFrom.renderPrompValue(data.dataName) : false
         this.broadcast({value: {value: this.config, nameState: data.dataName}, type: 'viewChanged'})
       }
 
@@ -151,7 +163,7 @@ export default class View extends Observer<IViewValue> {
           this.thumbTo ? this.thumbTo.renderThumb(pixelValue) : false
           this.config.valueTo = value;
           this.setConfig(this.config)
-          this.prompThumbTo.renderPrompValue(data.dataName)
+          this.config.hasPromp ? this.prompThumbTo.renderPrompValue(data.dataName) : false
           this.broadcast({value: {value: this.config, nameState: data.dataName}, type: 'viewChanged'})
         }
 

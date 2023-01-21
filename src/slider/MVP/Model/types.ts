@@ -7,7 +7,7 @@ export interface IConfig {
   step: number,
   isVertical: boolean,
   isFloatValues: boolean,
-  hasRuler: boolean,
+  hasScale: boolean,
   hasPromp: boolean,
 }
 //+

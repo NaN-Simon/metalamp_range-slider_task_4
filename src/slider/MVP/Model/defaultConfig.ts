@@ -6,8 +6,8 @@ const defaultConfig = {
   step: 10,
   isVertical: false,
   isFloatValues: false,
-  hasRuler: true,
-  hasPromp: true,
+  hasScale: false,
+  hasPromp: false,
 };
 // const defaultConfig = {
 //   min: -1.9,
@@ -17,7 +17,7 @@ const defaultConfig = {
 //   step: 4,
 //   isVertical: false,
 //   isFloatValues: true,
-//   hasRuler: true,
+//   hasScale: true,
 //   hasPromp: true,
 // };
 // const defaultConfig = {
@@ -28,7 +28,7 @@ const defaultConfig = {
 //   step: 23.43,
 //   isVertical: false,
 //   isFloatValues: true,
-//   hasRuler: true,
+//   hasScale: true,
 //   hasPromp: true,
 // };
 
