@@ -2,14 +2,8 @@ import { IConfig } from './types';
 export default class ProgressRange {
   protected config!: IConfig;
 
-  private progressBar: HTMLElement;
+  private progressBar!: HTMLElement;
   private progressRange!: HTMLElement;
-
-  constructor(rangeSliderSelector: HTMLElement) {
-    this.progressBar = rangeSliderSelector;
-
-    this.createRange();
-  }
 
   get getProgressRange() {
     return this.progressRange;
@@ -25,7 +19,9 @@ export default class ProgressRange {
     this.config = value;
   }
 
-  createRange() {
+  createRange(rangeSliderSelector: HTMLElement) {
+    this.progressBar = rangeSliderSelector;
+    this.progressRange ? this.progressRange.remove(): false
     this.progressRange = document.createElement('div');
     this.progressRange.classList.add('progress-range');
     this.progressBar.prepend(this.progressRange);

@@ -2,7 +2,7 @@ import { IConfig } from './types';
 
 export default class ProgressBar {
   protected config!: IConfig;
-  
+
   private rangeSliderElement: HTMLElement;
   private progressBar!: HTMLElement;
 

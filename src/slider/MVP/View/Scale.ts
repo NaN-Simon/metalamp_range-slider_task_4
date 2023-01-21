@@ -3,14 +3,8 @@ import { IConfig } from './types';
 export default class Scale {
   protected config!: IConfig;
 
-  private rangeSliderElement: HTMLElement;
+  private rangeSliderElement!: HTMLElement;
   private scale!: HTMLElement;
-
-  constructor(rangeSliderSelector: HTMLElement, defaultConfig: IConfig) {
-    this.config = defaultConfig;
-    this.rangeSliderElement = rangeSliderSelector;
-    this.createScale();
-  }
 
   get getScale() {
     return this.scale;
@@ -29,15 +23,16 @@ export default class Scale {
       return true;
     }
   }
-  removeScale(){
-    this.scale.remove()
-  }
-  createScale() {
+
+  createScale(rangeSliderSelector: HTMLElement) {
+    this.scale ? this.scale.remove() : false
+    this.rangeSliderElement = rangeSliderSelector;
+
     const isFloat = this.isFloat();
     const scaleOffsetW = this.rangeSliderElement.offsetWidth
     const gapCount = Math.ceil((this.config.max - this.config.min)/ this.config.step)
     const pixelStep = scaleOffsetW / gapCount;
-    
+
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
 

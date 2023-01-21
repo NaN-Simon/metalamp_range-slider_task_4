@@ -8,19 +8,10 @@ export default class Thumb extends Observer<IThumbValue> {
   private progressBar!: HTMLElement;
   private progressRange!: HTMLElement;
   private thumb!: HTMLElement;
-  private dataName: string;
+  private dataName!: string;
 
-  constructor(rangeSliderSelector: HTMLElement, dataName: string) {
+  constructor() {
     super();
-    this.rangeSliderElement = rangeSliderSelector;
-    this.progressBar = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement
-    this.progressRange = this.rangeSliderElement.querySelector('.progress-range') as HTMLElement
-
-    this.dataName = dataName;
-    this.createThumb();
-
-    this.clickHandlerBar();
-    this.clickHandlerThumb();
   }
 
   get getThumb() {
@@ -102,15 +93,23 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   updateConfig(value: IConfig): void {
-    // console.log('            !!!UPDATE CFG THUMB');
+    /* console.log('            !!!UPDATE CFG THUMB') */
     this.config = Object.assign({},value)
   }
 
-  private createThumb() {
+  createThumb(rangeSliderSelector: HTMLElement, dataName: string) {
+    this.rangeSliderElement = rangeSliderSelector;
+    this.progressBar = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement
+    this.progressRange = this.rangeSliderElement.querySelector('.progress-range') as HTMLElement
+    this.dataName = dataName;
+
+    this.thumb ? this.thumb.remove() : false
     this.thumb = document.createElement('div');
     this.thumb.classList.add('thumb');
     this.thumb.setAttribute('data-name', this.dataName);
     this.rangeSliderElement.append(this.thumb);
+    this.clickHandlerBar();
+    this.clickHandlerThumb();
   }
 
   private comparePositionOnClick(closestValue:number){
@@ -118,7 +117,7 @@ export default class Thumb extends Observer<IThumbValue> {
     const compareWithTo = this.config.valueTo ? (Math.abs(this.config.valueTo - closestValue)) : false
 
     let closestThumb = this.config.valueTo && compareWithFrom >= compareWithTo ? 'to' : 'from'
-    
+
     if(this.config.valueFrom === this.config.valueTo && closestValue < this.config.valueFrom){
       closestThumb = 'from'
     }
