@@ -10,10 +10,6 @@ export default class Thumb extends Observer<IThumbValue> {
   private thumb!: HTMLElement;
   private dataName!: string;
 
-  constructor() {
-    super();
-  }
-
   get getThumb() {
     return this.thumb;
   }
@@ -67,7 +63,12 @@ export default class Thumb extends Observer<IThumbValue> {
 
   private getPxValueAndValue(e: MouseEvent): number[] {
     const rect = this.getRangeSliderRect
-    const shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+    let shift = 0
+    if(this.config.isVertical){
+      shift = (Math.min(Math.max(0, e.y - rect.y), rect.height) / rect.height) * rect.height;
+    } else {
+      shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+    }
     let pixelValue = 0;
     let value = 0;
 
@@ -106,6 +107,7 @@ export default class Thumb extends Observer<IThumbValue> {
     this.thumb ? this.thumb.remove() : false
     this.thumb = document.createElement('div');
     this.thumb.classList.add('thumb');
+    this.config.isVertical ? this.thumb.classList.add('thumb--vertical') : false
     this.thumb.setAttribute('data-name', this.dataName);
     this.rangeSliderElement.append(this.thumb);
     this.clickHandlerBar();
@@ -169,13 +171,19 @@ export default class Thumb extends Observer<IThumbValue> {
   renderDefaultThumbPosition(){
 
     if(this.dataName === 'from'){
-      this.thumb.style.left = this.getStartPosition('from') +'px'
+      this.config.isVertical
+      ? this.thumb.style.top = this.getStartPosition('from') +'px'
+      : this.thumb.style.left = this.getStartPosition('from') +'px'
     } else {
-      this.thumb.style.left = this.getStartPosition('to') +'px'
+      this.config.isVertical
+      ? this.thumb.style.top = this.getStartPosition('to') +'px'
+      : this.thumb.style.left = this.getStartPosition('to') +'px'
     }
   }
 
   renderThumb(pxValue: number): void{
-    this.thumb.style.left = `${pxValue}px`
+    this.config.isVertical
+    ? this.thumb.style.top = `${pxValue}px`
+    : this.thumb.style.left = `${pxValue}px`
   }
 }

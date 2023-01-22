@@ -9,6 +9,12 @@ export default class ProgressRange {
     return this.progressRange;
   }
 
+  get getOffset(){
+    return this.config.isVertical
+    ? this.progressBar.offsetHeight
+    : this.progressBar.offsetWidth;
+  }
+
   get getWrapperSize(){
     return this.config.isVertical
     ? this.progressBar.getBoundingClientRect().height
@@ -24,22 +30,32 @@ export default class ProgressRange {
     this.progressRange ? this.progressRange.remove(): false
     this.progressRange = document.createElement('div');
     this.progressRange.classList.add('progress-range');
+    this.config.isVertical
+    ? this.progressRange.classList.add('progress-range--vertical') : false
     this.progressBar.prepend(this.progressRange);
   }
 
   renderDefaultProgressRange(thumbPosition:string, value: number){
     if(thumbPosition === 'start'){
-      this.progressRange.style.left = value + 'px'
+      this.config.isVertical
+      ? this.progressRange.style.top = value + 'px'
+      : this.progressRange.style.left = value + 'px'
     } else {
-      this.progressRange.style.right = this.getWrapperSize - value + 'px'
+      this.config.isVertical
+      ? this.progressRange.style.bottom = this.getWrapperSize - value + 'px'
+      : this.progressRange.style.right = this.getWrapperSize - value + 'px'
     }
   }
 
   renderProgressRange(thumb:string, pixelValue: number): void{
     if(thumb === 'from'){
-      this.progressRange.style.left = `${pixelValue}px`
+      this.config.isVertical
+      ? this.progressRange.style.top = `${pixelValue}px`
+      : this.progressRange.style.left = `${pixelValue}px`
     } else {
-      this.progressRange.style.right = `${this.progressBar.offsetWidth - pixelValue}px`
+      this.config.isVertical
+      ? this.progressRange.style.bottom = `${this.getOffset - pixelValue}px`
+      : this.progressRange.style.right = `${this.getOffset - pixelValue}px`
 
     }
   }

@@ -1,10 +1,10 @@
 const defaultConfig = {
   min: 10,
   max: 70,
-  valueFrom: 10,
-  valueTo: undefined,
+  valueFrom: 30,
+  valueTo: 60,
   step: 10,
-  isVertical: false,
+  isVertical: true,
   isFloatValues: false,
   hasScale: false,
   hasPromp: false,

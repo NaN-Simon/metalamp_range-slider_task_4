@@ -74,7 +74,7 @@ export default class View extends Observer<IViewValue> {
   private initComponents() {
     /* console.log('            !!!INIT COMPONENTS') */
     /* init ProgressBar */
-    this.progressBar = new ProgressBar(this.wrapperElement);
+    this.progressBar = new ProgressBar();
     /* init ProgressRange */
     this.progressRange = new ProgressRange()
     /* init Thumb */
@@ -93,6 +93,7 @@ export default class View extends Observer<IViewValue> {
 
   private setStartValues(){
     /* console.log('            !!!INIT START VALUES') */
+    this.progressBar.createBar(this.wrapperElement)
     /* Thumb creating */this.thumbFrom.createThumb(this.wrapperElement, 'from')
     /* Thumb creating */this.config.valueTo ? this.thumbTo?.createThumb(this.wrapperElement, 'to') : false
     /* ProgressRange creatnig */this.progressRange.createRange(this.progressBar.getProgressBar)
@@ -108,6 +109,7 @@ export default class View extends Observer<IViewValue> {
       /* Promp renderDefault */ this.config.valueTo ? this.prompThumbTo.renderPrompValue('to') : false
     }
 
+    /* ProgressRange renderDefault */
     const from = this.thumbFrom.getStartPosition('from') as number
     const to = this.thumbTo ? this.thumbTo.getStartPosition('to') as number : undefined
 
