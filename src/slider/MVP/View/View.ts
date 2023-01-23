@@ -10,7 +10,7 @@ import Promp from './Promp';
 export default class View extends Observer<IViewValue> {
   protected config!: IConfig;
 
-  private wrapperElement: HTMLElement;
+  private rangeSlider: HTMLElement;
   private progressBar!: ProgressBar;
   private progressRange!: ProgressRange;
   private thumbFrom!: Thumb;
@@ -18,13 +18,15 @@ export default class View extends Observer<IViewValue> {
   private prompThumbFrom!: Promp;
   private prompThumbTo!: Promp;
   private scale!: Scale;
+  private wrapper! : HTMLElement
 
   constructor(wrapperSelector: HTMLElement) {
     super();
-    this.wrapperElement = wrapperSelector;
-    this.wrapperElement.classList.add('range-slider-wrapper')
-
-
+    this.rangeSlider = wrapperSelector;
+    this.rangeSlider.classList.add('range-slider')
+    this.wrapper = document.createElement('div')
+    this.wrapper.classList.add('range-slider__wrapper')
+    this.rangeSlider.append(this.wrapper)
   }
 
   get getWrapperSize(){
@@ -46,14 +48,8 @@ export default class View extends Observer<IViewValue> {
   private resizeEvent(){
     window.addEventListener('resize',()=>{
       this.setStartValues()
-      this.scale.createScale(this.wrapperElement)
+      this.scale.createScale(this.wrapper)
     })
-  }
-
-  private getOffset(HTMLElement: HTMLElement){
-    return this.config.isVertical
-    ? HTMLElement.offsetHeight
-    : HTMLElement.offsetWidth;
   }
 
   setConfig(value: IConfig): void {
@@ -93,14 +89,14 @@ export default class View extends Observer<IViewValue> {
 
   private setStartValues(){
     /* console.log('            !!!INIT START VALUES') */
-    this.progressBar.createBar(this.wrapperElement)
-    /* Thumb creating */this.thumbFrom.createThumb(this.wrapperElement, 'from')
-    /* Thumb creating */this.config.valueTo ? this.thumbTo?.createThumb(this.wrapperElement, 'to') : false
+    this.progressBar.createBar(this.wrapper)
+    /* Thumb creating */this.thumbFrom.createThumb(this.wrapper, 'from')
+    /* Thumb creating */this.config.valueTo ? this.thumbTo?.createThumb(this.wrapper, 'to') : false
     /* ProgressRange creatnig */this.progressRange.createRange(this.progressBar.getProgressBar)
     /* Thumb renderDefault */ this.thumbFrom.renderDefaultThumbPosition()
     /* Thumb renderDefault */ this.thumbTo ? this.thumbTo.renderDefaultThumbPosition() : false
     if(this.config.hasScale){
-      /* Scale creating */this.scale.createScale(this.wrapperElement)
+      /* Scale creating */this.scale.createScale(this.wrapper)
     }
     if(this.config.hasPromp){
       /* Promp creating */ this.prompThumbFrom.createPromp(this.thumbFrom.getThumb)
@@ -114,9 +110,10 @@ export default class View extends Observer<IViewValue> {
     const to = this.thumbTo ? this.thumbTo.getStartPosition('to') as number : undefined
 
     if(this.thumbTo){
-      from && this.progressRange.renderDefaultProgressRange('start',from)
+      this.progressRange.renderDefaultProgressRange('start',from)
       to && this.progressRange.renderDefaultProgressRange('end', to)
     } else {
+
       this.progressRange.renderDefaultProgressRange('end',from)
     }
 

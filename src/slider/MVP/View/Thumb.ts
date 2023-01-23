@@ -85,12 +85,13 @@ export default class Thumb extends Observer<IThumbValue> {
 
   getStartPosition(thumb: string){
     const valuesArray = this.getValuesArray
-
+    let position = 0
     if(thumb === 'from'){
-      return ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
+      position = ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
     } else if (this.config.valueTo){
-      return ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep)
+      position = ((valuesArray.indexOf(this.config.valueTo))*this.getPixelStep)
     }
+    return position
   }
 
   updateConfig(value: IConfig): void {

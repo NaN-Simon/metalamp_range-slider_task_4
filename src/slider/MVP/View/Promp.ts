@@ -19,6 +19,7 @@ export default class Promp{
     this.thumbElement = thumbSelector;
     this.promp = document.createElement('div')
     this.promp.classList.add('promp')
+    this.config.isVertical ? this.promp.classList.add('promp--vertical') : false
     this.thumbElement.append(this.promp)
   }
 

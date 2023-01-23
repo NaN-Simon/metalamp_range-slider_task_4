@@ -36,6 +36,8 @@ export default class ProgressRange {
   }
 
   renderDefaultProgressRange(thumbPosition:string, value: number){
+    console.log('act');
+    
     if(thumbPosition === 'start'){
       this.config.isVertical
       ? this.progressRange.style.top = value + 'px'
