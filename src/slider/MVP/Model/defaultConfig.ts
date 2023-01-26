@@ -15,7 +15,7 @@ const defaultConfig = {
   valueFrom: -1.9,
   valueTo: 5.1,
   step: 4,
-  isVertical: true,
+  isVertical: false,
   isFloatValues: true,
   hasScale: true,
   hasPromp: true,

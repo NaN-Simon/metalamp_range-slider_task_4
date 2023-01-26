@@ -3,17 +3,20 @@ import Observer from '../../Observer/Observer';
 import defaultConfig from './defaultConfig'
 
 export default class Model extends Observer<ModelValues> {
+  private defaultConfig!: IConfig;
   private config!: IConfig;
 
   constructor() {
     super();
-    this.config = Object.assign({},defaultConfig);
-    // console.log(this.config.valueTo);
+    this.config = defaultConfig;
+  }
 
+  updateConfig(data:IConfig){
+    this.config = Object.assign({},data)
     this.configValidation()
   }
 
-  get getDefaultConfig(){
+  get getConfig(){
     return this.config
   }
 
@@ -29,7 +32,9 @@ export default class Model extends Observer<ModelValues> {
       valuesArray.push(value)
     }
 
-    if(valuesArray[valuesArray.length-1] !== this.config.max){valuesArray.push(this.config.max)};
+    if(valuesArray[valuesArray.length-1] !== this.config.max){
+      valuesArray.push(this.config.max)
+    };
 
     return valuesArray
   }
@@ -85,7 +90,7 @@ export default class Model extends Observer<ModelValues> {
   }
 
   checkPositionValues(value: IPositionValues): void {
-    // console.log(this.getDefaultConfig);
+    // console.log(this.getConfig);
 
   }
 }
