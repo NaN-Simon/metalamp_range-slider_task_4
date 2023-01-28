@@ -70,6 +70,9 @@ export default class View extends Observer<IViewValue> {
   private initComponents() {
     /* console.log('            !!!INIT COMPONENTS') */
     /* init ProgressBar */
+    // console.log(this.config.isVertical);
+
+    this.config.isVertical ? this.rangeSlider.classList.add('range-slider--vertical') : false
     this.progressBar = new ProgressBar();
     /* init ProgressRange */
     this.progressRange = new ProgressRange()
