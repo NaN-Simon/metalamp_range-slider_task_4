@@ -2,7 +2,8 @@ $thumbSize: 30px;
 $thumbSizeHalf: calc($thumbSize / 2);
 
 .range-slider{
-  height: calc(100vh - 35px);
+  // height: calc(100vh - 35px);
+  height: 100px;
   width: 100%;
   padding: 30px;
 
