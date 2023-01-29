@@ -43,7 +43,7 @@ export default class Scale {
     this.wrapperElement = rangeSliderSelector;
 
     const isFloat = this.isFloat();
-    
+
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
 
@@ -68,7 +68,7 @@ export default class Scale {
 
       this.scale.append(createEl);
     }
-    
+
     const scalePositionLastEl = this.getSeparatorCounts * this.getPixelStep
     const scaleValueLastEl = this.config.max
     const createEl = document.createElement('div')

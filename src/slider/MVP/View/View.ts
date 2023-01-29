@@ -48,7 +48,7 @@ export default class View extends Observer<IViewValue> {
   private resizeEvent(){
     window.addEventListener('resize',()=>{
       this.setStartValues()
-      this.scale.createScale(this.wrapper)
+      this.config.hasScale ? this.scale.createScale(this.wrapper) : false
     })
   }
 
@@ -70,8 +70,6 @@ export default class View extends Observer<IViewValue> {
   private initComponents() {
     /* console.log('            !!!INIT COMPONENTS') */
     /* init ProgressBar */
-    // console.log(this.config.isVertical);
-
     this.config.isVertical ? this.rangeSlider.classList.add('range-slider--vertical') : false
     this.progressBar = new ProgressBar();
     /* init ProgressRange */
@@ -100,6 +98,7 @@ export default class View extends Observer<IViewValue> {
     /* Thumb renderDefault */ this.thumbTo ? this.thumbTo.renderDefaultThumbPosition() : false
     if(this.config.hasScale){
       /* Scale creating */this.scale.createScale(this.wrapper)
+
     }
     if(this.config.hasPromp){
       /* Promp creating */ this.prompThumbFrom.createPromp(this.thumbFrom.getThumb)
@@ -110,13 +109,13 @@ export default class View extends Observer<IViewValue> {
 
     /* ProgressRange renderDefault */
     const from = this.thumbFrom.getStartPosition('from') as number
+
     const to = this.thumbTo ? this.thumbTo.getStartPosition('to') as number : undefined
 
     if(this.thumbTo){
       this.progressRange.renderDefaultProgressRange('start',from)
       to && this.progressRange.renderDefaultProgressRange('end', to)
     } else {
-
       this.progressRange.renderDefaultProgressRange('end',from)
     }
 

@@ -22,8 +22,8 @@ export default class Thumb extends Observer<IThumbValue> {
 
   get getWrapperSize(){
     return this.config.isVertical
-    ? this.progressBar.getBoundingClientRect().height
-    : this.progressBar.getBoundingClientRect().width
+    ? this.progressBar.offsetHeight
+    : this.progressBar.offsetWidth
   }
 
   get getSeparatorCounts(){
@@ -85,6 +85,7 @@ export default class Thumb extends Observer<IThumbValue> {
 
   getStartPosition(thumb: string){
     const valuesArray = this.getValuesArray
+
     let position = 0
     if(thumb === 'from'){
       position = ((valuesArray.indexOf(this.config.valueFrom))*this.getPixelStep)
@@ -172,13 +173,17 @@ export default class Thumb extends Observer<IThumbValue> {
   renderDefaultThumbPosition(){
 
     if(this.dataName === 'from'){
+      const from = this.getStartPosition('from') +'px'
+
       this.config.isVertical
-      ? this.thumb.style.top = this.getStartPosition('from') +'px'
-      : this.thumb.style.left = this.getStartPosition('from') +'px'
+      ? this.thumb.style.top = from
+      : this.thumb.style.left = from
     } else {
+      const to = this.getStartPosition('to') +'px'
+
       this.config.isVertical
-      ? this.thumb.style.top = this.getStartPosition('to') +'px'
-      : this.thumb.style.left = this.getStartPosition('to') +'px'
+      ? this.thumb.style.top = to
+      : this.thumb.style.left = to
     }
   }
 

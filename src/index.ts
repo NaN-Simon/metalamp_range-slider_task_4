@@ -6,14 +6,14 @@ import './slider/init/RangeSlider'
 import './slider/initJquery/slider'
 
 $('.js-slider-one').rangeSlider({
-  min: -100,
-  max: 100,
-  valueFrom: -90,
-  valueTo: 90,
+  min: -4,
+  max: 4,
+  valueFrom: 0,
+  valueTo: 4,
   step: 1,
   isVertical: false,
-  isFloatValues: true,
-  hasScale: false,
+  isFloatValues: false,
+  hasScale: true,
   hasPromp: true,
 });
 
@@ -32,7 +32,7 @@ $('.js-slider-two').rangeSlider({
 $('.js-slider-three').rangeSlider({
   min: -10.26,
   max: 10.2,
-  valueFrom: -85.2,
+  valueFrom: -10.26,
   valueTo: 10.2,
   step: 4,
   isVertical: false,

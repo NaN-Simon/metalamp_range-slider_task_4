@@ -9,14 +9,18 @@ export default class ProgressRange {
     return this.progressRange;
   }
 
-  get getOffset(){
+  get isVertical(){
     return this.config.isVertical
+  }
+
+  get getOffset(){
+    return this.isVertical
     ? this.progressBar.offsetHeight
     : this.progressBar.offsetWidth;
   }
 
   get getWrapperSize(){
-    return this.config.isVertical
+    return this.isVertical
     ? this.progressBar.getBoundingClientRect().height
     : this.progressBar.getBoundingClientRect().width
   }
@@ -30,30 +34,34 @@ export default class ProgressRange {
     this.progressRange ? this.progressRange.remove(): false
     this.progressRange = document.createElement('div');
     this.progressRange.classList.add('progress-range');
-    this.config.isVertical
+    this.isVertical
     ? this.progressRange.classList.add('progress-range--vertical') : false
     this.progressBar.prepend(this.progressRange);
   }
 
   renderDefaultProgressRange(thumbPosition:string, value: number){
     if(thumbPosition === 'start'){
-      this.config.isVertical
+      this.isVertical
       ? this.progressRange.style.top = value + 'px'
       : this.progressRange.style.left = value + 'px'
     } else {
-      this.config.isVertical
-      ? this.progressRange.style.bottom = this.getWrapperSize - value + 'px'
-      : this.progressRange.style.right = this.getWrapperSize - value + 'px'
+      if(this.isVertical){
+
+        this.progressRange.style.top = 0 + 'px'
+        this.progressRange.style.bottom = this.getWrapperSize - value + 'px'
+      } else {
+        this.progressRange.style.right = this.getWrapperSize - value + 'px'
+      }
     }
   }
 
   renderProgressRange(thumb:string, pixelValue: number): void{
     if(thumb === 'from'){
-      this.config.isVertical
+      this.isVertical
       ? this.progressRange.style.top = `${pixelValue}px`
       : this.progressRange.style.left = `${pixelValue}px`
     } else {
-      this.config.isVertical
+      this.isVertical
       ? this.progressRange.style.bottom = `${this.getOffset - pixelValue}px`
       : this.progressRange.style.right = `${this.getOffset - pixelValue}px`
 

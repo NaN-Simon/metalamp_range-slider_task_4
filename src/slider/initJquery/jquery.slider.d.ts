@@ -11,5 +11,5 @@ interface IConfig {
 }
 
 interface JQuery {
-  rangeSlider(myColor: IConfig): void
+  rangeSlider(userConfig: IConfig): void
 }
