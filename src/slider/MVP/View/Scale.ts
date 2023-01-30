@@ -38,54 +38,67 @@ export default class Scale {
     }
   }
 
+  get getValuesArray(){
+    const valuesArray: number[] = []
+    const valuesPositionArray: number[] = []
+
+    for(let i = 0; i < this.getSeparatorCounts; i++){
+      const value = Number((this.config.min + this.config.step * i).toFixed(2))
+      const valuePosition = i * this.getPixelStep
+      valuesArray.push(value)
+      valuesPositionArray.push(valuePosition)
+    }
+
+    if(valuesArray[valuesArray.length-1] !== this.config.max){
+      valuesArray.push(this.config.max)
+      valuesPositionArray.push(this.getSeparatorCounts * this.getPixelStep)
+    };
+    
+    return [valuesArray, valuesPositionArray]
+  }
+
+  get getPositionArray(){
+    const positionsArray: number[] = []
+    for(let i = 0; i <= this.getSeparatorCounts; i++){
+      const value = i * this.getPixelStep
+      positionsArray.push(value)
+    }
+    if(positionsArray[positionsArray.length-1] !== this.config.max){
+      positionsArray.push(this.getSeparatorCounts * this.getPixelStep)
+    };
+    console.log(positionsArray);
+    
+    return positionsArray
+  }
+
   createScale(rangeSliderSelector: HTMLElement) {
     this.scale ? this.scale.remove() : false
     this.wrapperElement = rangeSliderSelector;
-
-    const isFloat = this.isFloat();
 
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
 
     this.config.isVertical ? this.scale.classList.add('scale--veritcal') : false
 
-    for(let i = 0; i < this.getSeparatorCounts;i++){
-      const scalePosition = i * this.getPixelStep;
-      const scaleValue = this.config.min + i * this.config.step
-      const createEl = document.createElement('div')
 
+    const [valuesArray, valuesPositionArray] = this.getValuesArray
+    for(let i = 0; i <= this.getSeparatorCounts;i++){
+      const createEl = document.createElement('div')
       createEl.classList.add('scale__separator')
 
+      this.config.isVertical ? createEl.classList.add('scale__separator--vertical') : false
+      
       this.config.isVertical
-      ? createEl.style.top = scalePosition.toString() + 'px'
-      : createEl.style.left = scalePosition.toString() + 'px'
+      ? createEl.style.top = valuesPositionArray[i].toString() + 'px'
+      : createEl.style.left = valuesPositionArray[i].toString() + 'px'
 
-      if(isFloat){
-        createEl.innerHTML = scaleValue.toFixed(2).toString()
-      } else {
-        createEl.innerHTML = scaleValue.toString()
-      }
+      this.isFloat()
+      ?createEl.innerHTML = valuesArray[i].toFixed(2).toString()
+      : createEl.innerHTML = valuesArray[i].toString()
 
       this.scale.append(createEl);
+
     }
-
-    const scalePositionLastEl = this.getSeparatorCounts * this.getPixelStep
-    const scaleValueLastEl = this.config.max
-    const createEl = document.createElement('div')
-
-    createEl.classList.add('scale__separator')
-
-    this.config.isVertical
-    ? createEl.style.top = scalePositionLastEl.toString() + 'px'
-    : createEl.style.left = scalePositionLastEl.toString() + 'px'
-
-    if(isFloat){
-      createEl.innerHTML = scaleValueLastEl.toFixed(2).toString()
-    } else {
-      createEl.innerHTML = scaleValueLastEl.toString()
-    }
-
-    this.scale.append(createEl);
 
     this.wrapperElement.append(this.scale);
   }

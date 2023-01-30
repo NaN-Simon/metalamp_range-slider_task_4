@@ -2,7 +2,6 @@ $thumbSize: 30px;
 $thumbSizeHalf: calc($thumbSize / 2);
 
 .range-slider{
-  // height: calc(100vh - 35px);
   height: 100px;
   width: 100%;
   padding: 30px;
@@ -49,6 +48,7 @@ $thumbSizeHalf: calc($thumbSize / 2);
   width: $thumbSize;
   height: $thumbSize;
   position: absolute;
+  z-index: 10;
   left: 0px;
   top: 35px;
   transform: translateX(-15px) translateY(calc(-50% + -30px));
@@ -66,13 +66,34 @@ $thumbSizeHalf: calc($thumbSize / 2);
   position: absolute;
   left: 0;
   top: 30px;
-  // display: flex;
   user-select: none;
 
   &__separator{
     position: absolute;
-    padding-top: 3px;
+    top: 20px;
+    padding-top: 10px;
     transform: translateX(-50%) translateY(-50%);
+    &::before{
+      background: #000000cf;
+      border-radius: 2px;
+      content: "";
+      height: 14px;
+      width: 2px;
+      position: absolute;
+      top: -15px;
+      display: block;
+      transform: translateX(900%) translateY(+50%);
+    }
+
+    &--vertical{
+      padding-left: 40px;
+      padding-top: 0px;
+      &::before{
+        transform: rotate(90deg) translateX(100%) translateY(50%);
+        top: 0;
+        left: 35px;
+      }
+    }
   }
 
   &--veritcal{
