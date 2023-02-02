@@ -5,17 +5,17 @@ import './styles/index.scss';
 import './slider/init/RangeSlider'
 import './slider/initJquery/slider'
 
-// $('.js-slider-one').rangeSlider({
-//   min: -4,
-//   max: 4,
-//   valueFrom: 0,
-//   valueTo: 4,
-//   step: 1,
-//   isVertical: false,
-//   isFloatValues: false,
-//   hasScale: true,
-//   hasPromp: true,
-// });
+$('.js-slider-one').rangeSlider({
+  min: -5,
+  max: 5,
+  valueFrom: -2,
+  valueTo: 2,
+  step: 2,
+  isVertical: false,
+  isFloatValues: false,
+  hasScale: true,
+  hasPromp: true,
+});
 
 $('.js-slider-two').rangeSlider({
   min: -1.9,
@@ -30,13 +30,13 @@ $('.js-slider-two').rangeSlider({
 });
 
 $('.js-slider-three').rangeSlider({
-  min: -50.26,
-  max: 50.2,
-  valueFrom: -10.26,
-  valueTo: 10.2,
-  step: 10,
+  min: -50000,
+  max: 8000,
+  valueFrom: -10000,
+  valueTo: 2000,
+  step: 1,
   isVertical: false,
   isFloatValues: true,
-  hasScale: true,
+  hasScale: false,
   hasPromp: true,
 });

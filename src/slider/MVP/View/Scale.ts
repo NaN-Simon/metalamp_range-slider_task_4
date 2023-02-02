@@ -10,10 +10,8 @@ export default class Scale {
     return this.scale;
   }
 
-  get getWrapperSize(){
-    return this.config.isVertical
-    ? this.wrapperElement.offsetHeight
-    : this.wrapperElement.offsetWidth;
+  getSize(element: HTMLElement){
+    return this.config.isVertical ? element.offsetHeight : element.offsetWidth;
   }
 
   get getSeparatorCounts(){
@@ -21,7 +19,7 @@ export default class Scale {
   }
 
   get getPixelStep(){
-    return this.getWrapperSize / this.getSeparatorCounts
+    return this.getSize(this.wrapperElement) / this.getSeparatorCounts
   }
 
   updateConfig(value: IConfig): void {
@@ -53,7 +51,7 @@ export default class Scale {
       valuesArray.push(this.config.max)
       valuesPositionArray.push(this.getSeparatorCounts * this.getPixelStep)
     };
-    
+
     return [valuesArray, valuesPositionArray]
   }
 
@@ -67,7 +65,7 @@ export default class Scale {
       positionsArray.push(this.getSeparatorCounts * this.getPixelStep)
     };
     console.log(positionsArray);
-    
+
     return positionsArray
   }
 
@@ -87,7 +85,7 @@ export default class Scale {
       createEl.classList.add('scale__separator')
 
       this.config.isVertical ? createEl.classList.add('scale__separator--vertical') : false
-      
+
       this.config.isVertical
       ? createEl.style.top = valuesPositionArray[i].toString() + 'px'
       : createEl.style.left = valuesPositionArray[i].toString() + 'px'
@@ -95,7 +93,6 @@ export default class Scale {
       this.isFloat()
       ?createEl.innerHTML = valuesArray[i].toFixed(2).toString()
       : createEl.innerHTML = valuesArray[i].toString()
-
       this.scale.append(createEl);
 
     }

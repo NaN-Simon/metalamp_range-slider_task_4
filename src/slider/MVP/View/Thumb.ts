@@ -50,10 +50,6 @@ export default class Thumb extends Observer<IThumbValue> {
   get getRangeSliderRect() {
     const rect = this.rangeSliderElement.getBoundingClientRect()
     return {
-      top: rect.top,
-      right: rect.right,
-      bottom: rect.bottom,
-      left: rect.left,
       width: rect.width,
       height: rect.height,
       x: rect.x,
@@ -62,26 +58,54 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   private getPxValueAndValue(e: MouseEvent): number[] {
-    const rect = this.getRangeSliderRect
-    let shift = 0
-    if(this.config.isVertical){
-      shift = (Math.min(Math.max(0, e.y - rect.y), rect.height) / rect.height) * rect.height;
-    } else {
-      shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
-    }
-    let pixelValue = 0;
-    let value = 0;
+    const rect = this.getRangeSliderRect //position rangeSlider wrapper
 
-    for(let i = 0; i <= this.getSeparatorCounts; i++){
-      if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
-        value = Number((i * this.config.step + this.config.min).toFixed(2))
-        if(value > this.config.max){value = this.config.max}
-        pixelValue = i * this.getPixelStep
-      }
-    }
+    const shift = this.config.isVertical ? (e.y - rect.y) : (e.x - rect.x) //position cursor relatively rangeSliderWrapper size
+
+    const pixelSize = (this.config.max - this.config.min) / this.getWrapperSize; //total numbsize divided rangeSliderWrapper size
+
+    const stepSize = this.config.step / pixelSize //number of pixels per step
+
+    let pixelValue = (Math.round(shift / stepSize) * stepSize); //pixelValue via step
+
+    if(pixelValue <= 0) pixelValue = 0 //border validation min
+
+    if(pixelValue >= this.getWrapperSize) pixelValue = this.getWrapperSize //border validation max
+
+    let value = ((pixelValue / stepSize * this.config.step)+this.config.min); //value via step
+
+    value = this.config.isFloatValues ? Number(value.toFixed(2)) : Number(value.toFixed(0)) //changeable option isFloatValues
 
     return [pixelValue, value]
   }
+
+  // private getPxValueAndValue(e: MouseEvent): number[] {
+  //   const rect = this.getRangeSliderRect
+  //   let shift = 0
+  //   if(this.config.isVertical){
+  //     // shift = (Math.min(Math.max(0, e.y - rect.y), rect.height) / rect.height) * rect.height;
+  //     shift = (e.y - rect.y);
+  //   } else {
+  //     // shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
+  //     shift = (e.x - rect.x);
+  //   }
+  //   let pixelValue = 0;
+  //   let value = 0;
+  //   // console.log(shift);
+
+
+  //   for(let i = 0; i <= this.getSeparatorCounts; i++){
+  //     if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
+  //       value = Number((i * this.config.step + this.config.min).toFixed(2))
+  //       console.log(value);
+
+  //       if(value > this.config.max){value = this.config.max}
+  //       pixelValue = i * this.getPixelStep
+  //     }
+  //   }
+
+  //   return [pixelValue, value]
+  // }
 
   getStartPosition(thumb: string){
     const valuesArray = this.getValuesArray
@@ -165,7 +189,7 @@ export default class Thumb extends Observer<IThumbValue> {
   private onMouseMove(e: MouseEvent):void {
     e.preventDefault();
     this.thumb.ondragstart = () => false;
-    this.getPxValueAndValue(e);
+    // this.getPxValueAndValue(e);
 
     this.broadcast({pxValueAndValue: this.getPxValueAndValue(e), dataName: this.dataName})
   }
