@@ -21,7 +21,7 @@ export interface IViewValue {
   type: 'viewChanged';
 }
 //+
-//TODO убрать лишние
+// TODO убрать лишние
 export interface IThumbValue {
   pxValueAndValue: number[];
   dataName: string;
@@ -37,7 +37,3 @@ export interface IRect{
   x: number,
   y: number,
 }
-
-
-
-

@@ -15,15 +15,15 @@ export default class ProgressBar {
   }
 
   createBar(rangeSliderSelector: HTMLElement) {
-    this.progressBar ? this.progressBar.remove() : false
+    this.progressBar ? this.progressBar.remove() : false;
     this.rangeSliderElement = rangeSliderSelector;
     this.progressBar = document.createElement('div');
     this.progressBar.classList.add('progress-bar');
-    this.config.isVertical ? this.rotateBar() : false
+    this.config.isVertical ? this.rotateBar() : false;
     this.rangeSliderElement.prepend(this.progressBar);
   }
 
-  rotateBar(){
+  rotateBar() {
     this.progressBar.classList.add('progress-bar--vertical');
   }
 }

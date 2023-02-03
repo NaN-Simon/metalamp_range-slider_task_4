@@ -4,55 +4,55 @@
 @import "./rangeSlider.scss";
 
 html {
-  color: #000000;
+  color: #000;
   font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.header{
-  &__container{
-  padding: 0 30px;
+.header {
+  &__container {
+    padding: 0 30px;
   }
 
-  &__title{
+  &__title {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 }
 
-.main__container{
+.main__container {
   padding: 0 30px;
 }
 
-.slider-one{
-  &__wrapper{
+.slider-one {
+  &__wrapper {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 }
 
-.slider-two{
-  &__wrapper{
+.slider-two {
+  &__wrapper {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 }
 
-.slider-three{
-  &__wrapper{
+.slider-three {
+  &__wrapper {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-top: 10px;
     margin-bottom: 10px;
   }

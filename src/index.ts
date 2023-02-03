@@ -2,15 +2,15 @@ import './styles/reset.scss';
 import './styles/fonts.scss';
 import './styles/index.scss';
 
-import './slider/init/RangeSlider'
-import './slider/initJquery/slider'
+import './slider/init/RangeSlider';
+import './slider/initJquery/slider';
 
 $('.js-slider-one').rangeSlider({
   min: -5,
   max: 5,
-  valueFrom: -2,
-  valueTo: 2,
-  step: 2,
+  valueFrom: -5,
+  valueTo: 3,
+  step: 4,
   isVertical: false,
   isFloatValues: false,
   hasScale: true,

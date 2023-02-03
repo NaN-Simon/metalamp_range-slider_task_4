@@ -1,34 +1,33 @@
 import { IConfig } from './types';
 
-export default class Promp{
+export default class Promp {
   protected config!: IConfig;
-  
-  private promp!: HTMLElement
+
+  private promp!: HTMLElement;
   private thumbElement!: HTMLElement;
 
-  get getPromp(){
-    return this.promp
+  get getPromp() {
+    return this.promp;
   }
 
   updateConfig(value: IConfig): void {
     this.config = value;
   }
 
-  createPromp(thumbSelector: HTMLElement){
-    this.promp ? this.promp.remove() : false
+  createPromp(thumbSelector: HTMLElement) {
+    this.promp ? this.promp.remove() : false;
     this.thumbElement = thumbSelector;
-    this.promp = document.createElement('div')
-    this.promp.classList.add('promp')
-    this.config.isVertical ? this.promp.classList.add('promp--vertical') : false
-    this.thumbElement.append(this.promp)
+    this.promp = document.createElement('div');
+    this.promp.classList.add('promp');
+    this.config.isVertical ? this.promp.classList.add('promp--vertical') : false;
+    this.thumbElement.append(this.promp);
   }
 
-  renderPrompValue(thumb: string){
-    if(thumb === 'from'){
-      this.promp.innerHTML = this.config.valueFrom.toString()
+  renderPrompValue(thumb: string) {
+    if (thumb === 'from') {
+      this.promp.innerHTML = this.config.valueFrom.toString();
     } else {
-      this.promp.innerHTML = this.config.valueTo!.toString()
+      this.promp.innerHTML = this.config.valueTo!.toString();
     }
   }
-
 }

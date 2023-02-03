@@ -1,19 +1,19 @@
 $thumbSize: 30px;
 $thumbSizeHalf: calc($thumbSize / 2);
 
-.range-slider{
-  height: 100px;
+.range-slider {
   width: 100%;
+  height: 100px;
   padding: 30px;
 
-  &--vertical{
-    height: 400px;
+  &--vertical {
     width: 100px;
+    height: 400px;
   }
 
-  &__wrapper{
-    height: 100%;
+  &__wrapper {
     position: relative;
+    height: 100%;
   }
 }
 
@@ -21,95 +21,125 @@ $thumbSizeHalf: calc($thumbSize / 2);
   position: relative;
   width: 100%;
   height: 14px;
-  background: linear-gradient(rgb(242, 246, 248) 0%, rgb(216, 225, 231) 50%, rgb(181, 198, 208) 51%, rgb(224, 239, 249) 100%);
+  background: linear-gradient(
+    rgb(242 246 248) 0%,
+    rgb(216 225 231) 50%,
+    rgb(181 198 208) 51%,
+    rgb(224 239 249) 100%
+  );
   border-radius: 7px;
 
-  &--vertical{
+  &--vertical {
     width: 14px;
     height: 100%;
-    background: linear-gradient(90deg, #f2f6f8,#d8e1e7 50%,#b5c6d0 51%,#e0eff9);
+    background: linear-gradient(
+      90deg,
+      #f2f6f8,
+      #d8e1e7 50%,
+      #b5c6d0 51%,
+      #e0eff9
+    );
   }
 }
-.progress-range{
-  height: 14px;
+
+.progress-range {
   position: absolute;
-  left: 0px;
-  right: 0px;
-  background: linear-gradient(rgba(255, 255, 255, 0.69) 0%, rgb(115, 176, 237) 50%, rgb(0, 159, 253) 51%, rgba(255, 255, 255, 0.45) 100%);
+  right: 0;
+  left: 0;
+  height: 14px;
+  background: linear-gradient(
+    rgb(255 255 255 / 69%) 0%,
+    rgb(115 176 237) 50%,
+    rgb(0 159 253) 51%,
+    rgb(255 255 255 / 45%) 100%
+  );
   border-radius: 7px;
 
-  &--vertical{
+  &--vertical {
     height: auto;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.69) 0%, rgb(115, 176, 237) 50%, rgb(0, 159, 253) 51%, rgba(255, 255, 255, 0.45) 100%);
+    background: linear-gradient(
+      90deg,
+      rgb(255 255 255 / 69%) 0%,
+      rgb(115 176 237) 50%,
+      rgb(0 159 253) 51%,
+      rgb(255 255 255 / 45%) 100%
+    );
   }
 }
 
 .thumb {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  z-index: 10;
   width: $thumbSize;
   height: $thumbSize;
-  position: absolute;
-  z-index: 10;
-  left: 0px;
-  top: 35px;
-  transform: translateX(-15px) translateY(calc(-50% + -30px));
-  cursor: pointer;
-  background-image: radial-gradient(circle,#dee6eb 0,rgb(0 0 0 / 35%) 90%,#00000040 0);
+  background-image: radial-gradient(
+    circle,
+    #dee6eb 0,
+    rgb(0 0 0 / 35%) 90%,
+    #00000040 0
+  );
   border-radius: 50%;
   box-shadow: 0 0 13px #000000ad;
+  transform: translateX(-15px) translateY(calc(-50% + -30px));
+  cursor: pointer;
 
-  &--vertical{
+  &--vertical {
     transform: translateX(-7.5px) translateY(calc(-50% + 0px));
   }
 }
 
-.scale{
+.scale {
   position: absolute;
-  left: 0;
   top: 30px;
+  left: 0;
   user-select: none;
 
-  &__separator{
+  &__separator {
     position: absolute;
     top: 20px;
     padding-top: 10px;
     transform: translateX(-50%) translateY(-50%);
-    &::before{
-      background: #000000cf;
-      border-radius: 2px;
-      content: "";
-      height: 14px;
-      width: 2px;
+
+    &::before {
       position: absolute;
       top: -15px;
       display: block;
-      transform: translateX(900%) translateY(+50%);
+      width: 2px;
+      height: 14px;
+      background: #000000cf;
+      border-radius: 2px;
+      transform: translateX(100%) translateY(+50%);
+      content: "";
     }
 
-    &--vertical{
+    &--vertical {
+      padding-top: 0;
       padding-left: 40px;
-      padding-top: 0px;
-      &::before{
-        transform: rotate(90deg) translateX(100%) translateY(50%);
+
+      &::before {
         top: 0;
         left: 35px;
+        transform: rotate(90deg) translateX(-400%) translateY(50%);
       }
     }
   }
 
-  &--veritcal{
+  &--veritcal {
+    top: 0;
     left: 45px;
-    top: 0px;
-
   }
 }
 
-.promp{
-  top: - $thumbSize;
+.promp {
   position: absolute;
+  top: -$thumbSize;
   // transform: translateX(calc(-50% + $thumbSizeHalf));
-  transform: translateX(calc(-50% + $thumbSizeHalf)) translateY(calc(-50% + $thumbSizeHalf));
+  transform: translateX(calc(-50% + $thumbSizeHalf))
+    translateY(calc(-50% + $thumbSizeHalf));
 
-  &--vertical{
+  &--vertical {
     top: 0;
     left: -35px;
   }
