@@ -91,26 +91,24 @@ $thumbSizeHalf: calc($thumbSize / 2);
 }
 
 .scale {
-  position: absolute;
-  top: 30px;
-  left: 0;
+  transform: translateX(-0.5%) translateY(50%);
+    display: block;
+    position: absolute;
   user-select: none;
+  padding-top: 20px;
 
   &__separator {
     position: absolute;
-    top: 20px;
-    padding-top: 10px;
     transform: translateX(-50%) translateY(-50%);
 
     &::before {
       position: absolute;
-      top: -15px;
+      top: -9px;
       display: block;
       width: 2px;
-      height: 14px;
+      height: 12px;
       background: #000000cf;
       border-radius: 2px;
-      transform: translateX(100%) translateY(+50%);
       content: "";
     }
 
@@ -135,7 +133,6 @@ $thumbSizeHalf: calc($thumbSize / 2);
 .promp {
   position: absolute;
   top: -$thumbSize;
-  // transform: translateX(calc(-50% + $thumbSizeHalf));
   transform: translateX(calc(-50% + $thumbSizeHalf))
     translateY(calc(-50% + $thumbSizeHalf));
 

@@ -99,11 +99,8 @@ export default class View extends Observer<IViewValue> {
       /* Scale creating */this.scale.createScale(this.wrapper);
     }
     if (this.config.hasPromp) {
-      /* Promp creating */
-      this.prompThumbFrom.createPromp(this.thumbFrom.getThumb);
-      this.thumbTo
-        ? this.prompThumbTo.createPromp(this.thumbTo.getThumb)
-        : false;
+      /* Promp creating */ this.prompThumbFrom.createPromp(this.thumbFrom.getThumb);
+      /* Promp creating */ this.thumbTo ? this.prompThumbTo.createPromp(this.thumbTo.getThumb) : false;
       /* Promp renderDefault */ this.prompThumbFrom.renderPrompValue('from');
       /* Promp renderDefault */ this.config.valueTo ? this.prompThumbTo.renderPrompValue('to') : false;
     }

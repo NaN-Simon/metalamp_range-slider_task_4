@@ -18,10 +18,6 @@ export default class Scale {
     return Math.ceil((this.config.max - this.config.min) / this.config.step);
   }
 
-  get getPixelStep() {
-    return this.getSize(this.wrapperElement) / this.getSeparatorCounts;
-  }
-
   updateConfig(value: IConfig): void {
     this.config = value;
   }
@@ -36,65 +32,54 @@ export default class Scale {
     }
   }
 
-  get getValuesArray() {
-    const valuesArray: number[] = [];
-    const valuesPositionArray: number[] = [];
-
-    for (let i = 0; i < this.getSeparatorCounts; i++) {
-      const value = Number((this.config.min + this.config.step * i).toFixed(2));
-      const valuePosition = i * this.getPixelStep;
-      valuesArray.push(value);
-      valuesPositionArray.push(valuePosition);
-    }
-
-    if (valuesArray[valuesArray.length - 1] !== this.config.max) {
-      valuesArray.push(this.config.max);
-      valuesPositionArray.push(this.getSeparatorCounts * this.getPixelStep);
-    }
-
-    return [valuesArray, valuesPositionArray];
-  }
-
-  // get getPositionArray(){
-  //   const positionsArray: number[] = []
-  //   for(let i = 0; i <= this.getSeparatorCounts; i++){
-  //     const value = i * this.getPixelStep
-  //     positionsArray.push(value)
-  //   }
-  //   if(positionsArray[positionsArray.length-1] !== this.config.max){
-  //     positionsArray.push(this.getSeparatorCounts * this.getPixelStep)
-  //   };
-  //   console.log(positionsArray);
-
-  //   return positionsArray
-  // }
-
   createScale(rangeSliderSelector: HTMLElement) {
     this.scale ? this.scale.remove() : false;
     this.wrapperElement = rangeSliderSelector;
-
     this.scale = document.createElement('div');
     this.scale.classList.add('scale');
-
     this.config.isVertical ? this.scale.classList.add('scale--veritcal') : false;
 
-    const [valuesArray, valuesPositionArray] = this.getValuesArray;
-    for (let i = 0; i <= this.getSeparatorCounts; i++) {
-      const createEl = document.createElement('div');
-      createEl.classList.add('scale__separator');
+    /* first scale */
+    const firstScale = document.createElement('span');
+    firstScale.innerHTML = this.config.min.toString();
+    firstScale.classList.add('scale__separator', 'scale__separator--first');
+    this.wrapperElement.append(this.scale);
+    if (this.config.isVertical) {
+      firstScale.classList.add('scale__separator--vertical');
+      firstScale.style.top = `${0}px`;
+    } else {
+      firstScale.style.left = `${0}px`;
+    }
+    this.scale.append(firstScale);
 
-      this.config.isVertical ? createEl.classList.add('scale__separator--vertical') : false;
+    /* between scale */
+    const pixelSize = (this.config.max - this.config.min) / this.getSize(this.wrapperElement);
+    const stepSize = this.config.step / pixelSize;
 
-      this.config.isVertical
-        ? createEl.style.top = `${valuesPositionArray[i].toString()}px`
-        : createEl.style.left = `${valuesPositionArray[i].toString()}px`;
-
-      // this.isFloat()
-      // ?createEl.innerHTML = valuesArray[i].toFixed(2).toString()
-      // : createEl.innerHTML = valuesArray[i].toString()
-      this.scale.append(createEl);
+    for (let i = 1; i < this.getSeparatorCounts; i++) {
+      const btwScale = document.createElement('span');
+      btwScale.classList.add('scale__separator');
+      btwScale.innerHTML = (this.config.min + i * this.config.step).toString();
+      if (this.config.isVertical) {
+        btwScale.classList.add('scale__separator--vertical');
+        btwScale.style.top = `${i * stepSize}px`;
+      } else {
+        btwScale.style.left = `${i * stepSize}px`;
+      }
+      this.scale.append(btwScale);
     }
 
+    /* last scale */
+    const lastScale = document.createElement('span');
+    lastScale.innerHTML = this.config.max.toString();
+    lastScale.classList.add('scale__separator', 'scale__separator--last');
+    if (this.config.isVertical) {
+      lastScale.classList.add('scale__separator--vertical');
+      lastScale.style.top = `${this.getSize(this.wrapperElement)}px`;
+    } else {
+      lastScale.style.left = `${this.getSize(this.wrapperElement)}px`;
+    }
     this.wrapperElement.append(this.scale);
+    this.scale.append(lastScale);
   }
 }

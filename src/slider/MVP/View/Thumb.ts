@@ -61,7 +61,8 @@ export default class Thumb extends Observer<IThumbValue> {
 
   private getPxValueAndValue(e: MouseEvent): number[] {
     const rect = this.getRangeSliderRect; // position rangeSlider wrapper
-
+    // console.log((e.x - rect.x));
+    
     const shift = this.config.isVertical ? (e.y - rect.y) : (e.x - rect.x); // position cursor relatively rangeSliderWrapper size
 
     const pixelSize = (this.config.max - this.config.min) / this.getWrapperSize; // total numbsize divided rangeSliderWrapper size
@@ -80,7 +81,8 @@ export default class Thumb extends Observer<IThumbValue> {
     value = this.config.isFloatValues // changeable option isFloatValues
       ? Number(value.toFixed(2))
       : Number(value.toFixed(0));
-
+    // console.log(pixelValue);
+    
     return [pixelValue, value];
   }
 
