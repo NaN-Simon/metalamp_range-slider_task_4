@@ -13,7 +13,7 @@ $('.js-slider-one').rangeSlider({
   step: 4,
   isVertical: false,
   isFloatValues: false,
-  hasScale: true,
+  hasScale: false,
   hasPromp: true,
 });
 

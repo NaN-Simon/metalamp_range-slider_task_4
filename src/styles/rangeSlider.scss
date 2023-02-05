@@ -1,5 +1,12 @@
-$thumbSize: 30px;
+/* Sizes */
+$sliderHeight: 8px;
+$thumbSize: 10px;
 $thumbSizeHalf: calc($thumbSize / 2);
+/* Colors */
+$sliderProgressBar: linear-gradient(#faffeb,#c3c5c7 50%,#e7eef2);
+$sliderProgressBarVerical: linear-gradient(90deg, #faffeb,#c3c5c7 50%,#e7eef2);
+$sliderProgressRange: linear-gradient(0deg,#1beef1,#e7bf69);
+$sliderProgressRangeVertical: linear-gradient(90deg,#1beef1,#e7bf69);;
 
 .range-slider {
   width: 100%;
@@ -9,6 +16,7 @@ $thumbSizeHalf: calc($thumbSize / 2);
   &--vertical {
     width: 100px;
     height: 400px;
+    padding: 5px 70px 5px 25px;
   }
 
   &__wrapper {
@@ -20,25 +28,14 @@ $thumbSizeHalf: calc($thumbSize / 2);
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 14px;
-  background: linear-gradient(
-    rgb(242 246 248) 0%,
-    rgb(216 225 231) 50%,
-    rgb(181 198 208) 51%,
-    rgb(224 239 249) 100%
-  );
+  height: $sliderHeight;
+  background: $sliderProgressBar;
   border-radius: 7px;
 
   &--vertical {
-    width: 14px;
+    width: $sliderHeight;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      #f2f6f8,
-      #d8e1e7 50%,
-      #b5c6d0 51%,
-      #e0eff9
-    );
+    background: $sliderProgressBarVerical;
   }
 }
 
@@ -46,52 +43,38 @@ $thumbSizeHalf: calc($thumbSize / 2);
   position: absolute;
   right: 0;
   left: 0;
-  height: 14px;
-  background: linear-gradient(
-    rgb(255 255 255 / 69%) 0%,
-    rgb(115 176 237) 50%,
-    rgb(0 159 253) 51%,
-    rgb(255 255 255 / 45%) 100%
-  );
+  height: $sliderHeight;
+  background: $sliderProgressRange;
   border-radius: 7px;
 
   &--vertical {
     height: auto;
-    background: linear-gradient(
-      90deg,
-      rgb(255 255 255 / 69%) 0%,
-      rgb(115 176 237) 50%,
-      rgb(0 159 253) 51%,
-      rgb(255 255 255 / 45%) 100%
-    );
+    background: $sliderProgressRangeVertical;
   }
 }
 
 .thumb {
-  position: absolute;
-  top: 35px;
-  left: 0;
-  z-index: 10;
-  width: $thumbSize;
-  height: $thumbSize;
-  background-image: radial-gradient(
-    circle,
-    #dee6eb 0,
-    rgb(0 0 0 / 35%) 90%,
-    #00000040 0
-  );
-  border-radius: 50%;
-  box-shadow: 0 0 13px #000000ad;
-  transform: translateX(-15px) translateY(calc(-50% + -30px));
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 6px;
   cursor: pointer;
+  height: 28px;
+  position: absolute;
+  top: 82%;
+  transform: translateX(-5px) translateY(calc(-50% - 29px));
+  width: $thumbSize;
+  z-index: 10;
+  background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
 
   &--vertical {
-    transform: translateX(-7.5px) translateY(calc(-50% + 0px));
+    width: 28px;
+    height: 10px;
+    transform: translateX(-9.5px) translateY(calc(-50% + 0px));
   }
 }
 
 .scale {
-  transform: translateX(-0.5%) translateY(50%);
+  width: 100%;
+  transform: translateX(3px) translateY(50%);
     display: block;
     position: absolute;
   user-select: none;
@@ -103,23 +86,25 @@ $thumbSizeHalf: calc($thumbSize / 2);
 
     &::before {
       position: absolute;
-      top: -9px;
+      top: -11px;
       display: block;
       width: 2px;
       height: 12px;
       background: #000000cf;
       border-radius: 2px;
       content: "";
+      transform: translateX(100%) translateY(0%);
     }
 
     &--vertical {
       padding-top: 0;
-      padding-left: 40px;
+      padding-left: 20px;
+      transform: translateX(-50%) translateY(-100%);
 
       &::before {
         top: 0;
-        left: 35px;
-        transform: rotate(90deg) translateX(-400%) translateY(50%);
+        left: 15px;
+        transform: rotate(90deg) translateX(0%) translateY(50%);
       }
     }
   }
@@ -132,9 +117,9 @@ $thumbSizeHalf: calc($thumbSize / 2);
 
 .promp {
   position: absolute;
-  top: -$thumbSize;
+  top: -10px;
   transform: translateX(calc(-50% + $thumbSizeHalf))
-    translateY(calc(-50% + $thumbSizeHalf));
+    translateY(calc(-50%));
 
   &--vertical {
     top: 0;

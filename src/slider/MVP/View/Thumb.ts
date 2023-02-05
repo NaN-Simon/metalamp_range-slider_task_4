@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Observer from '../../Observer/Observer';
 import { IThumbValue, IConfig } from './types';
 
@@ -12,12 +13,6 @@ export default class Thumb extends Observer<IThumbValue> {
 
   get getThumb() {
     return this.thumb;
-  }
-
-  get getThumbSize() {
-    return this.config.isVertical
-      ? this.thumb.getBoundingClientRect().height
-      : this.thumb.getBoundingClientRect().width;
   }
 
   get getWrapperSize() {
@@ -62,7 +57,7 @@ export default class Thumb extends Observer<IThumbValue> {
   private getPxValueAndValue(e: MouseEvent): number[] {
     const rect = this.getRangeSliderRect; // position rangeSlider wrapper
     // console.log((e.x - rect.x));
-    
+
     const shift = this.config.isVertical ? (e.y - rect.y) : (e.x - rect.x); // position cursor relatively rangeSliderWrapper size
 
     const pixelSize = (this.config.max - this.config.min) / this.getWrapperSize; // total numbsize divided rangeSliderWrapper size
@@ -82,36 +77,9 @@ export default class Thumb extends Observer<IThumbValue> {
       ? Number(value.toFixed(2))
       : Number(value.toFixed(0));
     // console.log(pixelValue);
-    
+
     return [pixelValue, value];
   }
-
-  // private getPxValueAndValue(e: MouseEvent): number[] {
-  //   const rect = this.getRangeSliderRect
-  //   let shift = 0
-  //   if(this.config.isVertical){
-  //     // shift = (Math.min(Math.max(0, e.y - rect.y), rect.height) / rect.height) * rect.height;
-  //     shift = (e.y - rect.y);
-  //   } else {
-  //     // shift = (Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width) * rect.width;
-  //     shift = (e.x - rect.x);
-  //   }
-  //   let pixelValue = 0;
-  //   let value = 0;
-  //   // console.log(shift);
-
-  //   for(let i = 0; i <= this.getSeparatorCounts; i++){
-  //     if(shift >= (this.getPixelStep * i) - this.getThumbSize / 2) {
-  //       value = Number((i * this.config.step + this.config.min).toFixed(2))
-  //       console.log(value);
-
-  //       if(value > this.config.max){value = this.config.max}
-  //       pixelValue = i * this.getPixelStep
-  //     }
-  //   }
-
-  //   return [pixelValue, value]
-  // }
 
   getStartPosition(thumb: string) {
     const pixelSize = (this.config.max - this.config.min) / this.getWrapperSize;
@@ -168,9 +136,9 @@ export default class Thumb extends Observer<IThumbValue> {
 
   private comparePositionOnClick(closestValue:number) {
     const compareWithFrom = (Math.abs(this.config.valueFrom - closestValue));
-    const compareWithTo = this.config.valueTo 
-    ? (Math.abs(this.config.valueTo - closestValue)) 
-    : false;
+    const compareWithTo = this.config.valueTo
+      ? (Math.abs(this.config.valueTo - closestValue))
+      : false;
 
     let closestThumb = this.config.valueTo && compareWithFrom >= compareWithTo ? 'to' : 'from';
 
