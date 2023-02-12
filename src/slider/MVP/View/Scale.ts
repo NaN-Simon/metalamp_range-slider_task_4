@@ -29,6 +29,8 @@ export default class Scale {
       || this.config.isFloatValues
     ) {
       return true;
+    } else {
+      return false;
     }
   }
 

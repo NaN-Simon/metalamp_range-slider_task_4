@@ -1,22 +1,23 @@
 {
   "compilerOptions": {
+    "target": "es5",
+    "module": "es6",
+    "lib": ["es2016", "dom"],
+    "outDir": "./dist/",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "sourceMap": true,
     "alwaysStrict": true,
     "strict": true,
-    "noImplicitAny": true,
-    "outDir": "./dist/",
-    "module": "es6",
-    "target": "es5",
-    "jsx": "react",
     "allowJs": true,
-    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "lib": [
-      "es2016",
-      "dom"
-  ]
-  }
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": ["./dist"]
 }

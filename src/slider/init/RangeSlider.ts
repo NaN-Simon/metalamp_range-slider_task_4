@@ -5,8 +5,8 @@ import Presenter from '../MVP/Presenter/Presenter';
 
 export default class RangeSlider {
   private wrapperSelector!: HTMLElement;
-  private model!: Model;
-  private view!: View;
+  private model: Model | undefined;
+  private view: View | undefined;
   private userConfig: IConfig;
 
   constructor(wrapperSelector: HTMLElement, userConfig: IConfig) {
@@ -18,7 +18,7 @@ export default class RangeSlider {
   }
 
   setConfig(userConfig: IConfig) {
-    this.model.updateConfig(userConfig);
+    (this.model as Model).updateConfig(userConfig)
   }
 
   initModelView() {
@@ -27,6 +27,9 @@ export default class RangeSlider {
   }
 
   initPresenter() {
-    new Presenter(this.model, this.view);
+    new Presenter(
+      this.model as Model, 
+      this.view as View
+      );
   }
 }
