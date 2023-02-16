@@ -4,7 +4,7 @@ import { IThumbValue, IConfig } from './types';
 export default class Thumb extends Observer<IThumbValue> {
   protected config!: IConfig;
 
-  private rangeSliderElement!: HTMLElement;
+  private wrapperElement!: HTMLElement;
   private progressBar!: HTMLElement;
   private progressRange!: HTMLElement;
   private thumb!: HTMLElement;
@@ -40,6 +40,13 @@ export default class Thumb extends Observer<IThumbValue> {
     return this.getWrapperSize / this.getSeparatorCounts;
   }
 
+  get getPixelSize() {
+    return (this.config.max - this.config.min) / this.getWrapperSize;
+  }
+
+  get getStepSize() {
+    return this.config.step / this.getPixelSize;
+  }
   get getValuesArray() {
     const valuesArray: number[] = [];
 
@@ -56,7 +63,7 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   get getRangeSliderRect() {
-    const rect = this.rangeSliderElement.getBoundingClientRect();
+    const rect = this.wrapperElement.getBoundingClientRect();
     return {
       width: rect.width,
       height: rect.height,
@@ -85,27 +92,35 @@ export default class Thumb extends Observer<IThumbValue> {
     value = this.isFloat() // changeable option isFloatValues
       ? Number(value.toFixed(2))
       : Number(value.toFixed(0));
+    console.log(pixelValue, value);
 
     return [pixelValue, value];
   }
 
   getStartPosition(thumb: string) {
-    const pixelSize = (this.config.max - this.config.min) / this.getWrapperSize;
-    const stepSize = this.config.step / pixelSize; // это умножить на индекс из valueFrom
-
     // TODO найти способ нахождения индекса без forEach (this.getValuesArray)
     // this.config.valueFrom в порядковый номер на линии progressBar
-
     let position = 0;
+
     if (thumb === 'from') {
-      position = ((this.getValuesArray.indexOf(this.config.valueFrom)) * stepSize);
+      const indexFrom = this.getValuesArray.indexOf(this.config.valueFrom);
+      position = indexFrom * this.getStepSize;
     } else if (this.config.valueTo) {
-      position = ((this.getValuesArray.indexOf(this.config.valueTo)) * stepSize);
+      const indexTo = (this.getValuesArray.indexOf(this.config.valueTo));
+
+      if (this.config.valueTo === this.getValuesArray[this.getValuesArray.length - 1]) {
+        position = this.getWrapperSize;
+      } else {
+        position = indexTo * this.getStepSize;
+      }
     }
+
     return position;
   }
 
   renderDefaultThumbPosition() {
+    console.log('from&to', this.getStartPosition('from'), this.getStartPosition('to'));
+
     if (this.dataName === 'from') {
       const from = `${this.getStartPosition('from')}px`;
 
@@ -126,9 +141,9 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   createThumb(rangeSliderSelector: HTMLElement, dataName: string) {
-    this.rangeSliderElement = rangeSliderSelector;
-    this.progressBar = this.rangeSliderElement.querySelector('.progress-bar') as HTMLElement;
-    this.progressRange = this.rangeSliderElement.querySelector('.progress-range') as HTMLElement;
+    this.wrapperElement = rangeSliderSelector;
+    this.progressBar = this.wrapperElement.querySelector('.progress-bar') as HTMLElement;
+    this.progressRange = this.wrapperElement.querySelector('.progress-range') as HTMLElement;
     this.dataName = dataName;
 
     this.thumb ? this.thumb.remove() : false;
@@ -136,7 +151,7 @@ export default class Thumb extends Observer<IThumbValue> {
     this.thumb.classList.add('thumb');
     this.config.isVertical ? this.thumb.classList.add('thumb--vertical') : false;
     this.thumb.setAttribute('data-name', this.dataName);
-    this.rangeSliderElement.append(this.thumb);
+    this.wrapperElement.append(this.thumb);
     this.clickHandlerBar();
     this.clickHandlerThumb();
   }
@@ -166,6 +181,7 @@ export default class Thumb extends Observer<IThumbValue> {
 
   private onMouseClick(e: MouseEvent) {
     const [closestPxValue, closestValue] = this.getPxValueAndValue(e);
+    console.log(closestPxValue, closestValue);
     const closestThumb = this.comparePositionOnClick(closestValue);
 
     if (closestThumb === 'from') {

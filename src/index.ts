@@ -8,8 +8,8 @@ import './slider/initJquery/slider';
 $('.js-slider-one').rangeSlider({
   min: -5,
   max: 5,
-  valueFrom: -5,
-  valueTo: 3,
+  valueFrom: -1,
+  valueTo: 5,
   step: 4,
   isVertical: false,
   isFloatValues: false,
