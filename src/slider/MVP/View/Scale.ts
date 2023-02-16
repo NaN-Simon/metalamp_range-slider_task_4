@@ -2,10 +2,10 @@ import { IConfig } from './types';
 
 export default class Scale {
   protected config!: IConfig;
+  protected wrapperElement!: HTMLElement;
+  protected scale!: HTMLElement;
 
-  private wrapperElement!: HTMLElement;
-  private scale!: HTMLElement;
-
+  protected maxCountOfSeparators!: number;
   get getScale() {
     return this.scale;
   }
@@ -22,16 +22,26 @@ export default class Scale {
     this.config = value;
   }
 
-  isFloat() {
-    if (
-      this.config.min % 1 !== 0
-      || this.config.max % 1 !== 0
-      || this.config.isFloatValues
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+  setHTMLPxValue(elem: HTMLElement, value: number) {
+    const classElem = elem;
+    this.config.isVertical
+      ? classElem.style.top = `${Math.floor(value)}px`
+      : classElem.style.left = `${Math.floor(value)}px`;
+  }
+
+  setHTMLValue(HTMLElement: HTMLElement, value: number) {
+    const elem = HTMLElement;
+    this.config.isFloatValues || this.config.min % 1 !== 0 || this.config.max % 1 !== 0
+      ? elem.innerText = value.toFixed(1)
+      : elem.innerText = value.toFixed(0);
+  }
+
+  get getPixelSize() {
+    return (this.config.max - this.config.min) / this.getSize(this.wrapperElement);
+  }
+
+  get getStepSize() {
+    return this.config.step / this.getPixelSize;
   }
 
   createScale(rangeSliderSelector: HTMLElement) {
@@ -41,46 +51,76 @@ export default class Scale {
     this.scale.classList.add('scale');
     this.config.isVertical ? this.scale.classList.add('scale--veritcal') : false;
 
-    /* first scale */
-    const firstScale = document.createElement('span');
-    firstScale.innerHTML = this.config.min.toString();
-    firstScale.classList.add('scale__separator', 'scale__separator--first');
-    this.wrapperElement.append(this.scale);
-    if (this.config.isVertical) {
-      firstScale.classList.add('scale__separator--vertical');
-      firstScale.style.top = `${0}px`;
-    } else {
-      firstScale.style.left = `${0}px`;
+    this.createBetweenScale();
+    this.createLastScale();
+  }
+
+  calcValuesWith() {
+    const sumLength = this.config.min.toString().length + this.config.max.toString().length;
+    const strLength = (sumLength / 2.5) * this.getSeparatorCounts;
+    const PADDING = 2;
+    const FONTSIZE = 8;
+    const fullInnerSize = strLength * FONTSIZE * PADDING;
+    return Math.ceil(((fullInnerSize * 100) / this.getSize(this.wrapperElement)) / 100);
+  }
+
+  getValues() {
+    const sliderSize = this.getSize(this.wrapperElement);
+    let currentStep = 0;
+    let currentValue = this.config.min;
+
+    const arrayPixelValue = [0];
+    const arrayValue = [this.config.min];
+
+    while (currentStep <= sliderSize) {
+      currentStep += this.getStepSize;
+      currentValue += this.config.step;
+      if (currentStep < sliderSize) {
+        arrayPixelValue.push(currentStep);
+        arrayValue.push(currentValue);
+      } else {
+        arrayPixelValue.push(sliderSize);
+        arrayValue.push(this.config.max);
+      }
     }
-    this.scale.append(firstScale);
+    return [arrayPixelValue, arrayValue];
+  }
 
-    /* between scale */
-    const pixelSize = (this.config.max - this.config.min) / this.getSize(this.wrapperElement);
-    const stepSize = this.config.step / pixelSize;
-
-    for (let i = 1; i < this.getSeparatorCounts; i++) {
+  createBetweenScale() {
+    const indexStep = this.calcValuesWith();
+    const [arrayPixelValue, arrayValue] = this.getValues();
+    for (let i = 0; i < this.getSeparatorCounts; i += indexStep) {
+      /* creating el */
       const btwScale = document.createElement('span');
       btwScale.classList.add('scale__separator');
-      btwScale.innerHTML = (this.config.min + i * this.config.step).toString();
-      if (this.config.isVertical) {
-        btwScale.classList.add('scale__separator--vertical');
-        btwScale.style.top = `${i * stepSize}px`;
-      } else {
-        btwScale.style.left = `${i * stepSize}px`;
-      }
-      this.scale.append(btwScale);
-    }
+      this.config.isVertical ? btwScale.classList.add('scale__separator--vertical') : false;
 
-    /* last scale */
-    const lastScale = document.createElement('span');
-    lastScale.innerHTML = this.config.max.toString();
-    lastScale.classList.add('scale__separator', 'scale__separator--last');
-    if (this.config.isVertical) {
-      lastScale.classList.add('scale__separator--vertical');
-      lastScale.style.top = `${this.getSize(this.wrapperElement)}px`;
-    } else {
-      lastScale.style.left = `${this.getSize(this.wrapperElement)}px`;
+      /* adding value */
+      this.setHTMLValue(btwScale, arrayValue[i]);
+      this.setHTMLPxValue(btwScale, arrayPixelValue[i]);
+
+      /* check lastSeparator */
+      const lastSeparator = this.getSeparatorCounts - indexStep;
+      if (i > lastSeparator) {
+        const lengthPxLast = btwScale.innerHTML.length * 8;
+        this.getSize(this.wrapperElement);
+        if (this.getSize(this.wrapperElement) - lengthPxLast < arrayPixelValue[i]) {
+          break;
+        }
+      }
+
+      /* appending */
+      this.scale.append(btwScale);
+      this.wrapperElement.append(this.scale);
     }
+  }
+
+  createLastScale() {
+    const lastScale = document.createElement('span');
+    this.setHTMLValue(lastScale, this.config.max);
+    lastScale.classList.add('scale__separator');
+    this.config.isVertical ? lastScale.classList.add('scale__separator--vertical') : false;
+    this.setHTMLPxValue(lastScale, this.getSize(this.wrapperElement));
     this.wrapperElement.append(this.scale);
     this.scale.append(lastScale);
   }

@@ -2,11 +2,17 @@
 $sliderHeight: 8px;
 $thumbSize: 10px;
 $thumbSizeHalf: calc($thumbSize / 2);
+
 /* Colors */
-$sliderProgressBar: linear-gradient(#faffeb,#c3c5c7 50%,#e7eef2);
-$sliderProgressBarVerical: linear-gradient(90deg, #faffeb,#c3c5c7 50%,#e7eef2);
-$sliderProgressRange: linear-gradient(0deg,#1beef1,#e7bf69);
-$sliderProgressRangeVertical: linear-gradient(90deg,#1beef1,#e7bf69);;
+$sliderProgressBar: linear-gradient(#faffeb, #c3c5c7 50%, #e7eef2);
+$sliderProgressBarVerical: linear-gradient(
+  90deg,
+  #faffeb,
+  #c3c5c7 50%,
+  #e7eef2
+);
+$sliderProgressRange: linear-gradient(0deg, #1beef1, #e7bf69);
+$sliderProgressRangeVertical: linear-gradient(90deg, #1beef1, #e7bf69);
 
 .range-slider {
   width: 100%;
@@ -54,16 +60,19 @@ $sliderProgressRangeVertical: linear-gradient(90deg,#1beef1,#e7bf69);;
 }
 
 .thumb {
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 6px;
-  cursor: pointer;
-  height: 28px;
   position: absolute;
   top: 82%;
-  transform: translateX(-5px) translateY(calc(-50% - 29px));
-  width: $thumbSize;
   z-index: 10;
-  background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+  width: $thumbSize;
+  height: 28px;
+  background: linear-gradient(
+    0deg,
+    rgb(34 193 195 / 100%) 0%,
+    rgb(253 187 45 / 100%) 100%
+  );
+  border: 1px solid rgb(255 255 255);
+  transform: translateX(-5px) translateY(calc(-50% - 38px));
+  cursor: pointer;
 
   &--vertical {
     width: 28px;
@@ -73,38 +82,41 @@ $sliderProgressRangeVertical: linear-gradient(90deg,#1beef1,#e7bf69);;
 }
 
 .scale {
+  position: absolute;
+  display: block;
   width: 100%;
-  transform: translateX(3px) translateY(50%);
-    display: block;
-    position: absolute;
-  user-select: none;
   padding-top: 20px;
+  user-select: none;
 
   &__separator {
     position: absolute;
-    transform: translateX(-50%) translateY(-50%);
 
     &::before {
       position: absolute;
-      top: -11px;
+      top: -16px;
       display: block;
       width: 2px;
-      height: 12px;
+      height: 8px;
       background: #000000cf;
       border-radius: 2px;
       content: "";
-      transform: translateX(100%) translateY(0%);
     }
 
     &--vertical {
+      top: 8px;
+      left: -16px;
+      width: 8px;
+      height: 2px;
       padding-top: 0;
       padding-left: 20px;
-      transform: translateX(-50%) translateY(-100%);
+      transform: translateX(-50%) translateY(-300%);
 
       &::before {
         top: 0;
-        left: 15px;
-        transform: rotate(90deg) translateX(0%) translateY(50%);
+        left: 4px;
+        width: 8px;
+        height: 2px;
+        transform: translateX(0) translateY(300%);
       }
     }
   }
@@ -118,8 +130,7 @@ $sliderProgressRangeVertical: linear-gradient(90deg,#1beef1,#e7bf69);;
 .promp {
   position: absolute;
   top: -10px;
-  transform: translateX(calc(-50% + $thumbSizeHalf))
-    translateY(calc(-50%));
+  transform: translateX(calc(-50% + $thumbSizeHalf)) translateY(calc(-50%));
 
   &--vertical {
     top: 0;

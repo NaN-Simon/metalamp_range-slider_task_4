@@ -13,7 +13,7 @@ $('.js-slider-one').rangeSlider({
   step: 4,
   isVertical: false,
   isFloatValues: false,
-  hasScale: false,
+  hasScale: true,
   hasPromp: true,
 });
 
@@ -36,7 +36,7 @@ $('.js-slider-three').rangeSlider({
   valueTo: 2000,
   step: 1,
   isVertical: false,
-  isFloatValues: true,
-  hasScale: false,
+  isFloatValues: false,
+  hasScale: true,
   hasPromp: true,
 });

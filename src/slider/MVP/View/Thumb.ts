@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import Observer from '../../Observer/Observer';
 import { IThumbValue, IConfig } from './types';
 
@@ -10,6 +9,18 @@ export default class Thumb extends Observer<IThumbValue> {
   private progressRange!: HTMLElement;
   private thumb!: HTMLElement;
   private dataName!: string;
+  private a!: string;
+
+  isFloat() {
+    if (this.config
+      && (this.config.min % 1 !== 0
+      || this.config.max % 1 !== 0
+      || this.config.isFloatValues)
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   get getThumb() {
     return this.thumb;
@@ -56,7 +67,6 @@ export default class Thumb extends Observer<IThumbValue> {
 
   private getPxValueAndValue(e: MouseEvent): number[] {
     const rect = this.getRangeSliderRect; // position rangeSlider wrapper
-    // console.log((e.x - rect.x));
 
     const shift = this.config.isVertical ? (e.y - rect.y) : (e.x - rect.x); // position cursor relatively rangeSliderWrapper size
 
@@ -65,7 +75,6 @@ export default class Thumb extends Observer<IThumbValue> {
     const stepSize = this.config.step / pixelSize; // number of pixels per step
 
     let pixelValue = (Math.round(shift / stepSize) * stepSize); // pixelValue via step
-    // console.log(pixelValue);
 
     if (pixelValue <= 0) pixelValue = 0; // border validation min
 
@@ -73,10 +82,9 @@ export default class Thumb extends Observer<IThumbValue> {
 
     let value = (((pixelValue / stepSize) * this.config.step) + this.config.min); // value via step
 
-    value = this.config.isFloatValues // changeable option isFloatValues
+    value = this.isFloat() // changeable option isFloatValues
       ? Number(value.toFixed(2))
       : Number(value.toFixed(0));
-    // console.log(pixelValue);
 
     return [pixelValue, value];
   }
@@ -114,7 +122,6 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   updateConfig(value: IConfig): void {
-    /* console.log('            !!!UPDATE CFG THUMB') */
     this.config = { ...value };
   }
 
