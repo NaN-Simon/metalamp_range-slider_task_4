@@ -2,13 +2,8 @@ import { IConfig } from './types';
 
 export default class ProgressBar {
   protected config!: IConfig;
-
-  private rangeSliderElement!: HTMLElement;
-  private progressBar!: HTMLElement;
-
-  get getProgressBar() {
-    return this.progressBar;
-  }
+  protected rangeSliderElement!: HTMLElement;
+  protected progressBar!: HTMLElement;
 
   updateConfig(value: IConfig): void {
     this.config = value;

@@ -14,7 +14,7 @@ export default class Presenter {
     this.subscribeView();
   }
 
-  private subscribeView(): void {
+  protected subscribeView(): void {
     this.view.subscribe((data) => {
       if (data.type === 'viewChanged') {
         this.model.checkPositionValues(data.value);
@@ -22,7 +22,7 @@ export default class Presenter {
     });
   }
 
-  private subscribeModel(): void {
+  protected subscribeModel(): void {
     this.model.subscribe((data) => {
       if (data.type === 'configChanged') {
         this.view.setConfig(data.value);

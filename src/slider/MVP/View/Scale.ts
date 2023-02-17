@@ -4,22 +4,21 @@ export default class Scale {
   protected config!: IConfig;
   protected wrapperElement!: HTMLElement;
   protected scale!: HTMLElement;
-
   protected maxCountOfSeparators!: number;
-  get getScale() {
-    return this.scale;
-  }
+  protected separatorCounts!: number;
+  protected wrapperSize!: number;
+  protected stepSize!: number;
 
-  getSize(element: HTMLElement) {
-    return this.config.isVertical ? element.offsetHeight : element.offsetWidth;
-  }
-
-  get getSeparatorCounts() {
-    return Math.ceil((this.config.max - this.config.min) / this.config.step);
-  }
-
-  updateConfig(value: IConfig): void {
+  updateConfig(
+    value: IConfig,
+    separatorCounts:number,
+    wrapperSize: number,
+    stepSize: number,
+  ): void {
     this.config = value;
+    this.separatorCounts = separatorCounts;
+    this.wrapperSize = wrapperSize;
+    this.stepSize = stepSize;
   }
 
   setHTMLPxValue(elem: HTMLElement, value: number) {
@@ -36,14 +35,6 @@ export default class Scale {
       : elem.innerText = value.toFixed(0);
   }
 
-  get getPixelSize() {
-    return (this.config.max - this.config.min) / this.getSize(this.wrapperElement);
-  }
-
-  get getStepSize() {
-    return this.config.step / this.getPixelSize;
-  }
-
   createScale(rangeSliderSelector: HTMLElement) {
     this.scale ? this.scale.remove() : false;
     this.wrapperElement = rangeSliderSelector;
@@ -57,29 +48,28 @@ export default class Scale {
 
   calcValuesWith() {
     const sumLength = this.config.min.toString().length + this.config.max.toString().length;
-    const strLength = (sumLength / 2.5) * this.getSeparatorCounts;
+    const strLength = (sumLength / 2.5) * this.separatorCounts;
     const PADDING = 2;
     const FONTSIZE = 8;
     const fullInnerSize = strLength * FONTSIZE * PADDING;
-    return Math.ceil(((fullInnerSize * 100) / this.getSize(this.wrapperElement)) / 100);
+    return Math.ceil(((fullInnerSize * 100) / this.wrapperSize) / 100);
   }
 
   getValues() {
-    const sliderSize = this.getSize(this.wrapperElement);
     let currentStep = 0;
     let currentValue = this.config.min;
 
     const arrayPixelValue = [0];
     const arrayValue = [this.config.min];
 
-    while (currentStep <= sliderSize) {
-      currentStep += this.getStepSize;
+    while (currentStep <= this.wrapperSize) {
+      currentStep += this.stepSize;
       currentValue += this.config.step;
-      if (currentStep < sliderSize) {
+      if (currentStep < this.wrapperSize) {
         arrayPixelValue.push(currentStep);
         arrayValue.push(currentValue);
       } else {
-        arrayPixelValue.push(sliderSize);
+        arrayPixelValue.push(this.wrapperSize);
         arrayValue.push(this.config.max);
       }
     }
@@ -89,7 +79,7 @@ export default class Scale {
   createBetweenScale() {
     const indexStep = this.calcValuesWith();
     const [arrayPixelValue, arrayValue] = this.getValues();
-    for (let i = 0; i < this.getSeparatorCounts; i += indexStep) {
+    for (let i = 0; i < this.separatorCounts; i += indexStep) {
       /* creating el */
       const btwScale = document.createElement('span');
       btwScale.classList.add('scale__separator');
@@ -100,11 +90,11 @@ export default class Scale {
       this.setHTMLPxValue(btwScale, arrayPixelValue[i]);
 
       /* check lastSeparator */
-      const lastSeparator = this.getSeparatorCounts - indexStep;
+      const lastSeparator = this.separatorCounts - indexStep;
       if (i > lastSeparator) {
         const lengthPxLast = btwScale.innerHTML.length * 8;
-        this.getSize(this.wrapperElement);
-        if (this.getSize(this.wrapperElement) - lengthPxLast < arrayPixelValue[i]) {
+
+        if (this.wrapperSize - lengthPxLast < arrayPixelValue[i]) {
           break;
         }
       }
@@ -120,7 +110,7 @@ export default class Scale {
     this.setHTMLValue(lastScale, this.config.max);
     lastScale.classList.add('scale__separator');
     this.config.isVertical ? lastScale.classList.add('scale__separator--vertical') : false;
-    this.setHTMLPxValue(lastScale, this.getSize(this.wrapperElement));
+    this.setHTMLPxValue(lastScale, this.wrapperSize);
     this.wrapperElement.append(this.scale);
     this.scale.append(lastScale);
   }

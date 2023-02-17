@@ -3,8 +3,8 @@ import Observer from '../../Observer/Observer';
 import defaultConfig from './defaultConfig';
 
 export default class Model extends Observer<ModelValues> {
-  private defaultConfig!: IConfig;
-  private config!: IConfig;
+  protected defaultConfig!: IConfig;
+  protected config!: IConfig;
 
   constructor() {
     super();
@@ -67,6 +67,10 @@ export default class Model extends Observer<ModelValues> {
     this.config.step > (this.config.max - this.config.min)
       ? this.config.step = this.config.max - this.config.min
       : false;
+
+    if (this.config.min % 1 !== 0 || this.config.max % 1 !== 0) {
+      this.config.isFloatValues = true;
+    }
 
     this.validationMultiplicity(this.config.valueFrom);
     if (this.config.valueTo !== undefined) {

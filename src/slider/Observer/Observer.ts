@@ -1,5 +1,5 @@
 class Observer<T> {
-  private observers: ((data: T) => void)[];
+  protected observers: ((data: T) => void)[];
 
   constructor() {
     this.observers = [];

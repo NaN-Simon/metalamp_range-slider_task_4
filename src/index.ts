@@ -2,7 +2,6 @@ import './styles/reset.scss';
 import './styles/fonts.scss';
 import './styles/index.scss';
 
-import './slider/init/RangeSlider';
 import './slider/initJquery/slider';
 
 $('.js-slider-one').rangeSlider({
