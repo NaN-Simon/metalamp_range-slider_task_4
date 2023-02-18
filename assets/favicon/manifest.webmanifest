@@ -1,0 +1,12 @@
+{
+  "start_url": "./src/assets/favicon/",
+  "short_name": "favicon-short",
+  "name": "favicon",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
