@@ -23,7 +23,7 @@ export interface IViewValue {
 //+
 // TODO убрать лишние
 export interface IThumbValue {
-  pxValueAndValue: number[];
+  getPxValueAndValue: number[];
   dataName: string;
 }
 

@@ -14,6 +14,11 @@ export default class Model extends Observer<ModelValues> {
   updateConfig(data:IConfig) {
     this.config = { ...data };
     this.configValidation();
+    this.broadcast({ value: this.config, type: 'configChanged' });
+  }
+
+  checkPositionValues(value: IPositionValues): void {
+    this.updateConfig(value.value);
   }
 
   get getConfig() {
@@ -90,10 +95,5 @@ export default class Model extends Observer<ModelValues> {
         return true;
       });
     }
-  }
-
-  checkPositionValues(value: IPositionValues): void {
-    // console.log(this.getConfig);
-
   }
 }

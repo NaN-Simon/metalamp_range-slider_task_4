@@ -24,6 +24,8 @@ export default class Presenter {
 
   protected subscribeModel(): void {
     this.model.subscribe((data) => {
+      // console.log(data.value.valueFrom);
+
       if (data.type === 'configChanged') {
         this.view.setConfig(data.value);
       }

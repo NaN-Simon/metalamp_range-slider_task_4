@@ -144,41 +144,40 @@ export default class Thumb extends Observer<IThumbValue> {
   }
 
   protected clickHandlerBar() {
-    this.onMouseClick = this.onMouseClick.bind(this);
     this.wrapperElement.addEventListener('mousedown', this.onMouseClick);
   }
 
-  protected onMouseClick(e: MouseEvent) {
+  protected onMouseClick = (e: MouseEvent) => {
     const [closestPxValue, closestValue] = this.getPxValueAndValue(e);
     const closestThumb = this.comparePositionOnClick(closestValue);
 
     if (closestThumb === 'from') {
-      this.broadcast({ pxValueAndValue: [closestPxValue, closestValue], dataName: 'from' });
+      this.broadcast({ getPxValueAndValue: [closestPxValue, closestValue], dataName: 'from' });
     } else {
-      this.broadcast({ pxValueAndValue: [closestPxValue, closestValue], dataName: 'to' });
+      this.broadcast({ getPxValueAndValue: [closestPxValue, closestValue], dataName: 'to' });
     }
-  }
+  };
 
   protected clickHandlerThumb() {
-    this.thumb.onmousedown = () => {
-      this.onMouseMove = this.onMouseMove.bind(this);
-      this.onMouseDown = this.onMouseDown.bind(this);
-      document.addEventListener('mousemove', this.onMouseMove);
-      document.addEventListener('mouseup', this.onMouseDown);
-    };
+    this.thumb.addEventListener('mousedown', this.onMouseDown);
   }
 
-  protected onMouseDown() {
+  protected onMouseDown = (): void => {
+    document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('mouseup', this.onMouseUp);
+  };
+
+  protected onMouseUp = (): void => {
     document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseDown);
-  }
+    document.removeEventListener('mouseup', this.onMouseUp);
+  };
 
-  protected onMouseMove(e: MouseEvent):void {
+  protected onMouseMove = (e: MouseEvent):void => {
     e.preventDefault();
     this.thumb.ondragstart = () => false;
 
-    this.broadcast({ pxValueAndValue: this.getPxValueAndValue(e), dataName: this.dataName });
-  }
+    this.broadcast({ getPxValueAndValue: this.getPxValueAndValue(e), dataName: this.dataName });
+  };
 
   renderThumb(pxValue: number): void {
     this.config.isVertical

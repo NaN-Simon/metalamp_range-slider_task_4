@@ -146,6 +146,22 @@ export default class View extends Observer<IViewValue> {
     }
   }
 
+  protected renderPrompValue(dataName: string) {
+    if (dataName === 'from' && this.config.hasPromp) {
+      this.prompThumbFrom.renderPrompValue(dataName);
+    } else if (this.config.hasPromp) {
+      this.prompThumbTo.renderPrompValue(dataName);
+    }
+  }
+
+  protected renderProgressRange(dataName: string, pixelValue: number) {
+    if (this.config.valueTo) {
+      this.progressRange.renderProgressRange(dataName, pixelValue);
+    } else {
+      this.progressRange.renderProgressRange('to', pixelValue);
+    }
+  }
+
   protected isTouchEachOther(thumb: string, value: number) {
     let result = false;
     if (thumb === 'from' && this.config.valueTo) {
@@ -160,25 +176,17 @@ export default class View extends Observer<IViewValue> {
 
   protected subscribeThumbs() {
     this.thumbFrom.subscribe((data) => {
-      const [pixelValue, value]: number[] = data.pxValueAndValue;
-
+      const [pixelValue, value]: number[] = data.getPxValueAndValue;
       if (data.dataName === 'from' && this.isTouchEachOther('from', value)) {
-        if (this.thumbTo) {
-          this.progressRange.renderProgressRange(data.dataName, pixelValue);
-        } else {
-          this.progressRange.renderProgressRange('to', pixelValue);
-        }
-
-        this.thumbFrom.renderThumb(pixelValue);
-        this.config.valueFrom = value;
-        this.setConfig(this.config);
-        this.config.hasPromp
-          ? this.prompThumbFrom.renderPrompValue(data.dataName)
-          : false;
         this.broadcast({
           value: { value: this.config, nameState: data.dataName },
           type: 'viewChanged',
         });
+        this.setConfig(this.config);
+        this.renderProgressRange(data.dataName, pixelValue);
+        this.thumbFrom.renderThumb(pixelValue);
+        this.config.valueFrom = value;
+        this.renderPrompValue(data.dataName);
       }
     });
 
@@ -187,20 +195,18 @@ export default class View extends Observer<IViewValue> {
     }
 
     this.thumbTo.subscribe((data) => {
-      const [pixelValue, value]: number[] = data.pxValueAndValue;
+      const [pixelValue, value]: number[] = data.getPxValueAndValue;
 
       if (data.dataName === 'to' && this.isTouchEachOther('to', value)) {
-        this.progressRange.renderProgressRange(data.dataName, pixelValue);
-        this.thumbTo ? this.thumbTo.renderThumb(pixelValue) : false;
-        this.config.valueTo = value;
-        this.setConfig(this.config);
-        this.config.hasPromp
-          ? this.prompThumbTo.renderPrompValue(data.dataName)
-          : false;
         this.broadcast({
           value: { value: this.config, nameState: data.dataName },
           type: 'viewChanged',
         });
+        this.setConfig(this.config);
+        this.renderProgressRange(data.dataName, pixelValue);
+        this.thumbTo ? this.thumbTo.renderThumb(pixelValue) : false;
+        this.config.valueTo = value;
+        this.renderPrompValue(data.dataName);
       }
     });
   }

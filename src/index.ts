@@ -29,10 +29,10 @@ $('.js-slider-two').rangeSlider({
 });
 
 $('.js-slider-three').rangeSlider({
-  min: -50000,
-  max: 8000,
-  valueFrom: -10000,
-  valueTo: 2000,
+  min: -500,
+  max: 80,
+  valueFrom: -100,
+  valueTo: 20,
   step: 1,
   isVertical: false,
   isFloatValues: false,
